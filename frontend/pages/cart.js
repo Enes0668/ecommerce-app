@@ -1,20 +1,33 @@
-import { useCart } from '../context/CartContext';
+import { useEffect, useState } from 'react';
 
 export default function Cart() {
-  const { cartItems } = useCart();
+    const [cartItems, setCartItems] = useState([]);
 
-  if (cartItems.length === 0) return <h2>Sepetin boş.</h2>;
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
 
-  return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Sepetim</h1>
-      <ul>
-        {cartItems.map(item => (
-          <li key={item._id}>
-            {item.name} - {item.price}₺ x {item.quantity}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+        fetch(`http://localhost:5000/api/cart/user/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+            setCartItems(data);
+            });
+            console.log('LocalStorage userId:', userId);
+    }, []);
+
+    return (
+        <div>
+            <h1>Sepetim</h1>
+            {cartItems.length === 0 ? (
+                <p>Sepetiniz boş.</p>
+            ) : (
+                cartItems.map((item) => (
+                    <div key={item._id}>
+                        <h3>{item.name}</h3>
+                        <p>Fiyat: {item.price}₺</p>
+                        <p>Adet: {item.quantity}</p>
+                    </div>
+                ))
+            )}
+        </div>
+    );
 }
