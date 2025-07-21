@@ -51,6 +51,11 @@ export default function Home() {
     }
   };
 
+  const handleLogout = () => {
+  localStorage.clear();
+  window.location.href = '/login';
+  };
+
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Ürünler</h1>
@@ -73,12 +78,15 @@ export default function Home() {
             >
               Sepete Ekle
             </button>
+            
             <hr />
           </li>
         ))}
       </ul>
-
       <Link href="/cart">Sepetim</Link>
+      <button onClick={handleLogout} style={{ marginBottom: '1rem' }}>
+        Çıkış Yap
+        </button>
     </div>
   );
 }

@@ -2,29 +2,61 @@ const express = require('express');
 const router = express.Router();
 const Cart = require('../models/Cart');
 
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const cartItems = await Cart.find({ userId });
+    res.status(200).json(cartItems);
+  } catch (error) {
+    res.status(500).json({ message: "Sepet getirilemedi" });
+  }
+});
+
 // Sepete ürün ekleme route
-router.post('/add', async (req, res) => {
+// POST: Ürünü sepete ekleme
+router.post('/cart', async (req, res) => {
     try {
-        const { userId, productId, name, price, quantity } = req.body;
+        const { userId, productId, name, price } = req.body;
 
-        if (!userId || !productId) {
-            return res.status(400).json({ message: 'Eksik bilgi' });
+        // Kullanıcının sepetinde o ürün var mı?
+        let existingItem = await Cart.findOne({ userId, productId });
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+            await existingItem.save();
+            return res.status(200).json(existingItem);
+        } else {
+            const newCartItem = new Cart({
+                userId,
+                productId,
+                name,
+                price,
+                quantity: 1
+            });
+            await newCartItem.save();
+            return res.status(201).json(newCartItem);
         }
-
-        const newCartItem = new Cart({
-            userId,
-            productId,
-            name,
-            price,
-            quantity,
-        });
-
-        await newCartItem.save();
-
-        res.status(200).json({ message: 'Ürün sepete eklendi' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Sunucu hatası, sepete eklenemedi' });
+        console.error('Sepete ekleme hatası:', error);
+        res.status(500).json({ message: 'Sepete ekleme başarısız' });
+    }
+});
+
+
+router.put('/:id', async (req, res) => {
+    try {
+        const { quantity } = req.body;
+        const cartItem = await Cart.findById(req.params.id);
+
+        if (!cartItem) return res.status(404).json({ message: 'Ürün bulunamadı' });
+
+        cartItem.quantity = quantity;
+        await cartItem.save();
+
+        res.status(200).json({ message: 'Adet güncellendi' });
+    } catch (error) {
+        console.error('Adet güncelleme hatası:', error);
+        res.status(500).json({ message: 'Sunucu hatası' });
     }
 });
 

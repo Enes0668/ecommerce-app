@@ -9,6 +9,7 @@ const Cart = require('./models/Cart');
 const User = require('./models/User');
 const cartRoutes = require('./routes/cart');
 const path = require('path');
+const { ObjectId } = require('mongodb');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
@@ -59,8 +60,8 @@ app.post('/api/cart/add', async (req, res) => {
         }
 
         const mongoose = require('mongoose');
-        const userObjectId = mongoose.Types.ObjectId(userId);
-        const productObjectId = mongoose.Types.ObjectId(productId);
+        const userObjectId = new mongoose.Types.ObjectId(userId);
+        const productObjectId = new mongoose.Types.ObjectId(productId);
 
         let cartItem = await Cart.findOne({ userId: userObjectId, productId: productObjectId });
 
@@ -84,6 +85,7 @@ app.post('/api/cart/add', async (req, res) => {
         res.status(500).json({ message: 'Sunucu hatası, sepete eklenemedi' });
     }
 });
+
 
 
 // --- AUTH ROUTE ---
@@ -125,15 +127,28 @@ app.post("/api/auth/login", async (req, res) => {
     }
 });
 
-
-app.get('/api/cart/add/user/:userId', async (req, res) => {
+app.get('/api/cart/user/:userId', async (req, res) => {
     try {
-        const cartItems = await Cart.find({ userId: req.params.userId });
+        const userId = req.params.userId;
+        const cartItems = await Cart.find({ userId: userId });
         res.status(200).json(cartItems);
-    } catch (err) {
-        res.status(500).json(err);
+    } catch (error) {
+        console.error('Sepet çekme hatası:', error);
+        res.status(500).json({ message: 'Sepet alınamadı.' });
     }
 });
+
+app.delete('/api/cart/:id', async (req, res) => {
+    try {
+        const cartItemId = req.params.id;
+        await Cart.findByIdAndDelete(cartItemId);
+        res.status(200).json({ message: 'Ürün sepetten silindi' });
+    } catch (error) {
+        console.error('Silme hatası:', error);
+        res.status(500).json({ message: 'Ürün silinemedi.' });
+    }
+});
+
 
 // --- SUNUCUYU BAŞLAT ---
 const PORT = process.env.PORT || 5000;
