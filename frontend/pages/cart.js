@@ -52,6 +52,24 @@ export default function Cart() {
         }
     };
 
+
+    const clearCart = async () => {
+    try {
+        const userId = localStorage.getItem('userId');  // Burada userId alınıyor
+
+        const response = await fetch(`http://localhost:5000/api/cart/clear/${userId}`, {
+            method: 'DELETE',
+        });
+        const data = await response.json();
+        console.log(data);
+        alert(data.message);
+        fetchCartItems();  // Sepet temizlendikten sonra sepeti güncelle
+    } catch (error) {
+        console.error('Sepeti temizlerken hata:', error);
+        alert('Sepeti temizlerken bir hata oluştu.');
+    }
+};
+
     return (
         <div>
             <h1>Sepetim</h1>
@@ -71,6 +89,7 @@ export default function Cart() {
                 ))
             )}
             <h2>Toplam: {totalPrice} ₺</h2>
+            <button onClick={clearCart}>Sepeti Temizle</button>
         </div>
     );
 }

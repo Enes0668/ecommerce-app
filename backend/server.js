@@ -149,7 +149,6 @@ app.delete('/api/cart/:id', async (req, res) => {
     }
 });
 
-
 // --- SUNUCUYU BAŞLAT ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Sunucu ${PORT} portunda çalışıyor`));
@@ -162,3 +161,4 @@ process.on('uncaughtException', (err) => {
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Promise Reddi:', reason);
 });
+

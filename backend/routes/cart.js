@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Cart = require('../models/Cart');
+const mongoose = require('mongoose');
 
 router.get("/user/:userId", async (req, res) => {
   try {
@@ -59,5 +60,19 @@ router.put('/:id', async (req, res) => {
         res.status(500).json({ message: 'Sunucu hatası' });
     }
 });
+
+router.delete('/clear/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const userObjectId = new mongoose.Types.ObjectId(userId);
+
+        const result = await Cart.deleteMany({ userId: userObjectId });
+        res.status(200).json({ message: 'Sepet başarıyla temizlendi', deletedCount: result.deletedCount });
+    } catch (error) {
+        console.error('Hata:', error.message);
+        res.status(500).json({ message: 'Sunucu hatası, sepet temizlenemedi', error: error.message });
+    }
+});
+
 
 module.exports = router;
