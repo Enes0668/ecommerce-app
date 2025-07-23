@@ -10,11 +10,13 @@ const User = require('./models/User');
 const cartRoutes = require('./routes/cart');
 const path = require('path');
 const { ObjectId } = require('mongodb');
+const orderRoutes = require('./routes/order');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/api/orders', orderRoutes);
 
 // --- MONGO DB BAĞLANTISI ---
 mongoose.connect(process.env.MONGO_URI, {

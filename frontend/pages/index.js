@@ -78,7 +78,6 @@ export default function Home() {
             >
               Sepete Ekle
             </button>
-            
             <hr />
           </li>
         ))}
@@ -87,6 +86,7 @@ export default function Home() {
       <button onClick={handleLogout} style={{ marginBottom: '1rem' }}>
         Çıkış Yap
         </button>
+      <Link href="/OrderHistory">Sipariş Geçmişi</Link>
     </div>
   );
 }

@@ -70,6 +70,34 @@ export default function Cart() {
     }
 };
 
+  const handleCheckout = async () => {
+    const userId = localStorage.getItem('userId');
+
+    try {
+        const response = await fetch('http://localhost:5000/api/orders/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }),
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        if (response.ok) {
+            alert('Siparişiniz başarıyla oluşturuldu!');
+            fetchCartItems(); // sepeti sıfırla
+        } else {
+            alert(data.message || 'Sipariş oluşturulamadı.');
+        }
+    } catch (error) {
+        console.error('Sipariş hatası:', error);
+        alert('Sunucu hatası oluştu.');
+    }
+};
+
+
     return (
         <div>
             <h1>Sepetim</h1>
@@ -90,6 +118,7 @@ export default function Cart() {
             )}
             <h2>Toplam: {totalPrice} ₺</h2>
             <button onClick={clearCart}>Sepeti Temizle</button>
+            <button onClick={handleCheckout}>Siparişi Tamamla</button>
         </div>
     );
 }

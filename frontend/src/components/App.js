@@ -1,5 +1,7 @@
 import Product from './components/Product';
 import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import OrderHistory from './pages/OrderHistory';
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -9,6 +11,13 @@ function App() {
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
+
+  <Router>
+  <Routes>
+    {/* diğer route'lar */}
+    <Route path="/orders" element={<OrderHistory />} />
+  </Routes>
+</Router>
 
   return (
     <div className="App">
