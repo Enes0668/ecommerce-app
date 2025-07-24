@@ -19,7 +19,7 @@ export default function Login() {
         setErrorMessage(data.message || 'Giriş başarısız.');
         return;
       }
-
+      localStorage.setItem('token', data.token);
       localStorage.setItem('userId', data.userId);
       localStorage.setItem('username', data.username);
       window.location.href = '/';

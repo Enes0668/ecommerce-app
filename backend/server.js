@@ -10,6 +10,8 @@ const User = require('./models/User');
 const cartRoutes = require('./routes/cart');
 const path = require('path');
 const { ObjectId } = require('mongodb');
+const authRoutes = require('./routes/auth');
+const protectedRoute = require('./routes/protectedRoute');
 const orderRoutes = require('./routes/order');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
@@ -17,7 +19,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api/orders', orderRoutes);
-
+app.use('/auth', authRoutes);
+ app.use('/protected', protectedRoute);
 // --- MONGO DB BAĞLANTISI ---
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -114,20 +117,34 @@ app.post("/api/auth/register", async (req, res) => {
 
 
 
+const jwt = require('jsonwebtoken');
+
 app.post("/api/auth/login", async (req, res) => {
-    try {
-        const user = await User.findOne({ email: req.body.email.toLowerCase() });
-        if (!user) return res.status(400).json({ message: "Kullanıcı bulunamadı" });
+  try {
+    const user = await User.findOne({ email: req.body.email.toLowerCase() });
+    if (!user) return res.status(400).json({ message: "Kullanıcı bulunamadı" });
 
-        const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
-        if (!isPasswordValid) return res.status(400).json({ message: "Şifre yanlış" });
+    const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
+    if (!isPasswordValid) return res.status(400).json({ message: "Şifre yanlış" });
 
-        res.status(200).json({ userId: user._id, username: user.username });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Sunucu hatası, giriş başarısız." });
-    }
+    // JWT oluştur
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.status(200).json({
+      token,
+      username: user.username,
+      userId: user._id
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Sunucu hatası, giriş başarısız." });
+  }
 });
+
 
 app.get('/api/cart/user/:userId', async (req, res) => {
     try {
