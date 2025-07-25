@@ -4,6 +4,10 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, minlength: 3 },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 6 },
+  address: { type: String, default: "" },
+  phone: { type: String, default: "" },
+  otpCode: String,
+  otpExpires: Date,
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

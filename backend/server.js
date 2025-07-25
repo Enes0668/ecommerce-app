@@ -14,12 +14,12 @@ const authRoutes = require('./routes/auth');
 const protectedRoute = require('./routes/protectedRoute');
 const orderRoutes = require('./routes/order');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
-
 const app = express();
+const OtpModel = require('./models/Otp');
 app.use(cors());
 app.use(express.json());
 app.use('/api/orders', orderRoutes);
-app.use('/auth', authRoutes);
+app.use('/api', authRoutes);
  app.use('/protected', protectedRoute);
 // --- MONGO DB BAĞLANTISI ---
 mongoose.connect(process.env.MONGO_URI, {
@@ -33,6 +33,14 @@ mongoose.connect(process.env.MONGO_URI, {
 // --- ROUTER ---
 app.use('/api/cart', cartRoutes);
 
+
+async function saveOtpToDB(email, otp) {
+  // Aynı email için eski OTP'leri sil (opsiyonel)
+  await OtpModel.deleteMany({ email });
+
+  const newOtp = new OtpModel({ email, otp });
+  await newOtp.save();
+}
 
 // --- ÜRÜNLER ROUTE ---
 app.get('/api/products', async (req, res) => {
@@ -105,6 +113,8 @@ app.post("/api/auth/register", async (req, res) => {
             username: req.body.username,
             email: req.body.email.toLowerCase(),
             password: hashedPassword,
+            address: req.body.address,
+            phone: req.body.phone
         });
 
         const savedUser = await newUser.save();
@@ -166,6 +176,34 @@ app.delete('/api/cart/:id', async (req, res) => {
         console.error('Silme hatası:', error);
         res.status(500).json({ message: 'Ürün silinemedi.' });
     }
+});
+const sendEmail = require('./utils/email');
+
+// Örnek Express.js backend endpoint
+app.post('/api/auth/send-otp', async (req, res) => {
+  const { email } = req.body;
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  console.log(`OTP for ${email}: ${otp}`); // Konsola yaz
+
+  try {
+    await saveOtpToDB(email, otp); // Veritabanına kaydet
+    await sendEmail(email, 'Doğrulama Kodu', `Doğrulama kodunuz: ${otp}`);
+    res.json({ message: 'OTP gönderildi.' });
+  } catch (err) {
+    console.error('Mail gönderilemedi:', err); // Hata logu
+    res.status(500).json({ message: 'Mail gönderilemedi.' });
+  }
+});
+
+
+app.post('/api/auth/verify-otp', async (req, res) => {
+  const { email, otp } = req.body;
+
+  const record = await OtpModel.findOne({ email, otp });
+  if (!record) return res.status(400).json({ message: 'Kod yanlış veya süresi dolmuş.' });
+
+  res.json({ message: 'Doğrulama başarılı.' });
 });
 
 // --- SUNUCUYU BAŞLAT ---

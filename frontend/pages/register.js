@@ -5,6 +5,8 @@ export default function Register() {
     username: "",
     email: "",
     password: "",
+    address: "",
+    phone: "",
   });
   const [message, setMessage] = useState("");
 
@@ -32,7 +34,7 @@ export default function Register() {
         const data = await res.json();
         console.log(data);
         setMessage('Kayıt başarılı!');
-        setFormData({ username: "", email: "", password: "" });
+        setFormData({ username: "", email: "", password: "", address: "", phone: "" });
       } else {
         setMessage('Kayıt olurken hata oluştu.');
       }
@@ -67,6 +69,22 @@ export default function Register() {
           name="password"
           placeholder="Password"
           value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="address"
+          placeholder="address"
+          value={formData.address}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="phone"
+          placeholder="phone"
+          value={formData.phone}
           onChange={handleChange}
           required
         />
