@@ -222,6 +222,39 @@ app.post('/api/auth/verify-otp', async (req, res) => {
   res.json({ message: 'Doğrulama başarılı.' });
 });
 
+app.post('/api/auth/reset-password', async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  try {
+    // Kullanıcıyı email'e göre bul
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+    }
+
+    // OTP eşleşmesini kontrol et
+    if (user.otp !== otp) {
+      return res.status(400).json({ message: 'OTP geçersiz' });
+    }
+
+    // Yeni şifreyi hash'le
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Şifreyi güncelle
+    user.password = hashedPassword;
+
+    // OTP'yi temizle (bir kere kullanılabilir)
+    user.otp = undefined;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Şifre başarıyla güncellendi' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
+});
 
 // --- SUNUCUYU BAŞLAT ---
 const PORT = process.env.PORT || 5000;
