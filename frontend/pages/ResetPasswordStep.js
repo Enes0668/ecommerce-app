@@ -8,7 +8,7 @@ export default function ResetPasswordStep({ email, otp }) {
 
   const handleReset = async () => {
     try {
-      await axios.post('http://localhost:5000/reset-password', {
+      await axios.post('http://localhost:5000/api/auth/reset-password', {
         email,
         otp,
         newPassword,

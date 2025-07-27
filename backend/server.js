@@ -196,15 +196,32 @@ app.post('/api/auth/send-otp', async (req, res) => {
   }
 });
 
-
 app.post('/api/auth/verify-otp', async (req, res) => {
   const { email, otp } = req.body;
+  console.log('Email from router.query:', email);
+  if(!otp){
+    return res.status(400).json({message: 'OTP eksik'})
+  }
+  else if (!email) {
+  }
 
-  const record = await OtpModel.findOne({ email, otp });
-  if (!record) return res.status(400).json({ message: 'Kod yanlış veya süresi dolmuş.' });
+  const emailTrimmed = email.trim().toLowerCase();
+  const otpTrimmed = otp.trim();
 
+  console.log('Gönderilen email:', emailTrimmed);
+  console.log('Gönderilen otp:', otpTrimmed);
+
+  const record = await OtpModel.findOne({ email: emailTrimmed, otp: otpTrimmed });
+
+  if (!record) {
+    console.log('OTP doğrulama başarısız');
+    return res.status(400).json({ message: 'Kod yanlış veya süresi dolmuş.' });
+  }
+
+  console.log('OTP doğrulama başarılı');
   res.json({ message: 'Doğrulama başarılı.' });
 });
+
 
 // --- SUNUCUYU BAŞLAT ---
 const PORT = process.env.PORT || 5000;

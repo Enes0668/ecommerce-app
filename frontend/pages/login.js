@@ -26,7 +26,7 @@ export default function Login() {
       localStorage.setItem('token', data.token);
       localStorage.setItem('userId', data.userId);
       localStorage.setItem('username', data.username);
-
+      
       // Ana sayfaya yönlendir
       router.push('/');
     } catch (error) {
@@ -34,7 +34,7 @@ export default function Login() {
       setErrorMessage('Sunucu hatası, lütfen tekrar deneyin.');
     }
   };
-
+  
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Giriş Yap</h1>

@@ -5,8 +5,9 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
+
   try {
     const response = await fetch('http://localhost:5000/api/send-otp', {
       method: 'POST',
@@ -15,6 +16,10 @@ export default function ForgotPassword() {
     });
 
     if (response.ok) {
+      // Emaili localStorage'a kaydet
+      localStorage.setItem('email', email);
+
+      // OTP doğrulama sayfasına yönlendir
       router.push('/OTPVerifyStep');
     } else {
       alert('OTP gönderilemedi. Lütfen tekrar deneyin.');
@@ -24,6 +29,7 @@ export default function ForgotPassword() {
     alert('Bir hata oluştu. Lütfen tekrar deneyin.');
   }
 };
+
 
   return (
     <div style={{ padding: '2rem' }}>

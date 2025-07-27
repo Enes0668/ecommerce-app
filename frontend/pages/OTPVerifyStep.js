@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { useRouter } from 'next/router';
 
 export default function OTPVerifyStep() {
   const [otp, setOtp] = useState('');
   const router = useRouter();
+  const email = localStorage.getItem('email');
 
   const handleVerify = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/auth/verify-otp', {
+      const res = await fetch('http://localhost:5000/api/auth/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ otp }),
+        body: JSON.stringify({ email, otp }),
       });
       const data = await res.json();
 
-      if (data.success) {
-        router.push('/reset-password');
+      if (res.ok) {
+        router.push('/ResetPasswordStep');
       } else {
-        alert('Kod yanlış veya süresi dolmuş.');
+        alert(data.message || 'Kod yanlış veya süresi dolmuş.');
       }
     } catch (err) {
       alert('Bir hata oluştu.');
