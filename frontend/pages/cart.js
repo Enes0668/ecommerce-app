@@ -26,9 +26,12 @@ export default function Cart() {
   };
 
   const calculateTotalPrice = (items) => {
-    const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    setTotalPrice(total);
-  };
+  const total = items.reduce((acc, item) => {
+    const price = item.productId?.price || 0;
+    return acc + price * item.quantity;
+  }, 0);
+  setTotalPrice(total);
+};
 
   const handleDelete = async (itemId) => {
     try {
@@ -109,8 +112,7 @@ export default function Cart() {
   cartItems.map((item) => (
     <div key={item._id}>
       <h3>{item.productId?.name}</h3>
-      <p>İsim: {item.name}</p>
-      <p>Fiyat: {item.price}₺</p>
+      <p>Fiyat: {item.productId?.price}₺</p>
       <p>Adet: {item.quantity}</p>
       <p>Kategori: {item.productId?.category?.name}</p>
       <button onClick={() => handleQuantityChange(item._id, item.quantity - 1)}>-</button>
