@@ -13,6 +13,7 @@ const { ObjectId } = require('mongodb');
 const authRoutes = require('./routes/auth');
 const protectedRoute = require('./routes/protectedRoute');
 const orderRoutes = require('./routes/order');
+const categoryRoutes = require('./routes/category');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const app = express();
 const OtpModel = require('./models/Otp');
@@ -32,7 +33,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // --- ROUTER ---
 app.use('/api/cart', cartRoutes);
-
+app.use('/api/categories', categoryRoutes);
 
 async function saveOtpToDB(email, otp) {
   // Aynı email için eski OTP'leri sil (opsiyonel)

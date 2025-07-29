@@ -3,76 +3,87 @@ const router = express.Router();
 const Cart = require('../models/Cart');
 const mongoose = require('mongoose');
 
+// Kullanıcının sepetini getirme
 router.get("/user/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-    const cartItems = await Cart.find({ userId });
+    const cartItems = await Cart.find({ userId })
+      .populate({
+        path: 'productId',
+        populate: {
+          path: 'category',
+          model: 'Category'
+        }
+      });
+
     res.status(200).json(cartItems);
   } catch (error) {
+    console.error('Sepet getirilemedi:', error);
     res.status(500).json({ message: "Sepet getirilemedi" });
   }
 });
 
-// Sepete ürün ekleme route
-// POST: Ürünü sepete ekleme
+// Sepete ürün ekleme
 router.post('/cart', async (req, res) => {
-    try {
-        const { userId, productId, name, price } = req.body;
+  try {
+    const { userId, productId, name, price, category } = req.body;
 
-        // Kullanıcının sepetinde o ürün var mı?
-        let existingItem = await Cart.findOne({ userId, productId });
+    let existingItem = await Cart.findOne({ userId, productId });
 
-        if (existingItem) {
-            existingItem.quantity += 1;
-            await existingItem.save();
-            return res.status(200).json(existingItem);
-        } else {
-            const newCartItem = new Cart({
-                userId,
-                productId,
-                name,
-                price,
-                quantity: 1
-            });
-            await newCartItem.save();
-            return res.status(201).json(newCartItem);
-        }
-    } catch (error) {
-        console.error('Sepete ekleme hatası:', error);
-        res.status(500).json({ message: 'Sepete ekleme başarısız' });
+    if (existingItem) {
+      existingItem.quantity += 1;
+      await existingItem.save();
+      return res.status(200).json(existingItem);
+    } else {
+      const newCartItem = new Cart({
+        userId,
+        productId,
+        name,
+        price,
+        quantity: 1,
+        categoryName: product.categoryName
+      });
+      await newCartItem.save();
+      return res.status(201).json(newCartItem);
     }
+  } catch (error) {
+    console.error('Sepete ekleme hatası:', error);
+    res.status(500).json({ message: 'Sepete ekleme başarısız' });
+  }
 });
 
-
+// Adet güncelleme
 router.put('/:id', async (req, res) => {
-    try {
-        const { quantity } = req.body;
-        const cartItem = await Cart.findById(req.params.id);
+  try {
+    const { quantity } = req.body;
+    const cartItem = await Cart.findById(req.params.id);
 
-        if (!cartItem) return res.status(404).json({ message: 'Ürün bulunamadı' });
+    if (!cartItem) return res.status(404).json({ message: 'Ürün bulunamadı' });
 
-        cartItem.quantity = quantity;
-        await cartItem.save();
+    cartItem.quantity = quantity;
+    await cartItem.save();
 
-        res.status(200).json({ message: 'Adet güncellendi' });
-    } catch (error) {
-        console.error('Adet güncelleme hatası:', error);
-        res.status(500).json({ message: 'Sunucu hatası' });
-    }
+    res.status(200).json({ message: 'Adet güncellendi' });
+  } catch (error) {
+    console.error('Adet güncelleme hatası:', error);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
 });
 
+// Sepeti temizleme
 router.delete('/clear/:userId', async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const userObjectId = new mongoose.Types.ObjectId(userId);
+  try {
+    const { userId } = req.params;
+    const userObjectId = new mongoose.Types.ObjectId(userId);
 
-        const result = await Cart.deleteMany({ userId: userObjectId });
-        res.status(200).json({ message: 'Sepet başarıyla temizlendi', deletedCount: result.deletedCount });
-    } catch (error) {
-        console.error('Hata:', error.message);
-        res.status(500).json({ message: 'Sunucu hatası, sepet temizlenemedi', error: error.message });
-    }
+    const result = await Cart.deleteMany({ userId: userObjectId });
+    res.status(200).json({ message: 'Sepet başarıyla temizlendi', deletedCount: result.deletedCount });
+  } catch (error) {
+    console.error('Sepet temizleme hatası:', error);
+    res.status(500).json({ message: 'Sunucu hatası, sepet temizlenemedi', error: error.message });
+  }
 });
+
 
 
 module.exports = router;

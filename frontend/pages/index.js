@@ -35,6 +35,7 @@ export default function Home() {
           name: product.name,
           price: product.price,
           quantity: 1,
+          category: product.category
         }),
       });
 

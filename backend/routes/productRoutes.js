@@ -14,22 +14,28 @@ router.get('/:id', async (req, res) => {
     res.json(product);
 });
 
-app.post('/api/products', async (req, res) => {
+router.post('/api/products', async (req, res) => {
   try {
     const { name, price, description } = req.body;
 
-    // Yeni ürün modeli (daha önce oluşturduysan)
-    const newProduct = new Product({
+    // Eğer categoryName id ise, önce kategoriyi bul
+    const category = await Category.findById(category);
+    if (!category) {
+      return res.status(400).json({ message: 'Kategori bulunamadı' });
+    }
+
+    const product = new Product({
       name,
       price,
       description,
+      category: category._id,  // Burada kategori adını kaydediyoruz
     });
 
-    const savedProduct = await newProduct.save();
-
-    res.status(201).json(savedProduct);
+    await product.save();
+    res.status(201).json(product);
   } catch (error) {
-    res.status(500).json({ message: 'Ürün eklenirken hata oluştu' });
+    console.error(error);
+    res.status(500).json({ message: 'Ürün oluşturulurken hata oluştu' });
   }
 });
 

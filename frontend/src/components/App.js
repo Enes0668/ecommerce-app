@@ -5,7 +5,7 @@ import OrderHistory from '../../pages/OrderHistory';
 import EmailStep from '../../pages/EmailStep';
 import OTPVerifyStep from '../../pages/OTPVerifyStep';
 import ResetPasswordStep from '../../pages/ResetPasswordStep';
-
+import AddCategory from '../../pages/AddCategory';
 function App() {
   const [products, setProducts] = useState([]);
   const [email, setEmail] = useState('');
@@ -53,6 +53,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPasswordStep email={email} otp={otp} />} />
 
         <Route path="/orders" element={<OrderHistory />} />
+        <Route path="/add-category" element={<AddCategory />} />
       </Routes>
     </Router>
   );
