@@ -7,7 +7,10 @@ export default function OrderHistory() {
   useEffect(() => {
     fetch(`http://localhost:5000/api/orders/user/${userId}`)
       .then(res => res.json())
-      .then(data => setOrders(data))
+      .then(data => {
+      console.log(data);  // gelen veriyi burada kontrol et
+      setOrders(data);
+    })
       .catch(err => console.error('Siparişler alınamadı:', err));
   }, [userId]);
 
@@ -19,7 +22,6 @@ export default function OrderHistory() {
       ) : (
         orders.map(order => (
           <div key={order._id} style={{ border: '1px solid gray', margin: '10px', padding: '10px' }}>
-            <p><strong>İsim:</strong> {name}</p>
             <p><strong>Sipariş ID:</strong> {order._id}</p>
             <p><strong>Tarih:</strong> {new Date(order.createdAt).toLocaleString()}</p>
             <p><strong>Toplam Fiyat:</strong> {order.totalPrice} ₺</p>
@@ -29,7 +31,7 @@ export default function OrderHistory() {
               <ul>
                 {order.items.map(item => (
                   <li key={item.productId}>
-                    {item.name} - {item.quantity} x {item.price} ₺
+                    {item.productId.name} - {item.quantity} x {item.productId.price} ₺
                   </li>
                 ))}
               </ul>

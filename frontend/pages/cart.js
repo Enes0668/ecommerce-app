@@ -26,12 +26,12 @@ export default function Cart() {
   };
 
   const calculateTotalPrice = (items) => {
-  const total = items.reduce((acc, item) => {
-    const price = item.productId?.price || 0;
-    return acc + price * item.quantity;
-  }, 0);
-  setTotalPrice(total);
-};
+    const total = items.reduce((acc, item) => {
+      const price = item.productId?.price || 0;
+      return acc + price * item.quantity;
+    }, 0);
+    setTotalPrice(total);
+  };
 
   const handleDelete = async (itemId) => {
     try {
@@ -85,7 +85,13 @@ export default function Cart() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({
+          userId: userId,
+          items: cartItems.map(item => ({
+            productId: item.productId._id || item.productId,
+            quantity: item.quantity
+          }))
+        })
       });
 
       const data = await response.json();
@@ -107,20 +113,20 @@ export default function Cart() {
       <h1>Sepetim</h1>
 
       {!Array.isArray(cartItems) || cartItems.length === 0 ? (
-  <p>Sepetiniz boş.</p>
-) : (
-  cartItems.map((item) => (
-    <div key={item._id}>
-      <h3>{item.productId?.name}</h3>
-      <p>Fiyat: {item.productId?.price}₺</p>
-      <p>Adet: {item.quantity}</p>
-      <p>Kategori: {item.productId?.category?.name}</p>
-      <button onClick={() => handleQuantityChange(item._id, item.quantity - 1)}>-</button>
-      <button onClick={() => handleQuantityChange(item._id, item.quantity + 1)}>+</button>
-      <button onClick={() => handleDelete(item._id)}>Sil</button>
-    </div>
-  ))
-)}
+        <p>Sepetiniz boş.</p>
+      ) : (
+        cartItems.map((item) => (
+          <div key={item._id}>
+            <h3>{item.productId?.name}</h3>
+            <p>Fiyat: {item.productId?.price}₺</p>
+            <p>Adet: {item.quantity}</p>
+            <p>Kategori: {item.productId?.category?.name}</p>
+            <button onClick={() => handleQuantityChange(item._id, item.quantity - 1)}>-</button>
+            <button onClick={() => handleQuantityChange(item._id, item.quantity + 1)}>+</button>
+            <button onClick={() => handleDelete(item._id)}>Sil</button>
+          </div>
+        ))
+      )}
 
       <h2>Toplam: {totalPrice} ₺</h2>
       <button onClick={clearCart}>Sepeti Temizle</button>

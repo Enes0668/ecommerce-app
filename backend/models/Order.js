@@ -4,12 +4,25 @@ const orderSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
   items: [
     {
-      productId: mongoose.Schema.Types.ObjectId,
-      name: String,
-      price: Number,
-      quantity: Number,
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",  // 👈 Bu satır önemli
+        required: true
+      },
+      quantity: {
+        type: Number,
+        required: true
+      }
     }
   ],
+  totalPrice: {
+    type: Number,
+    required: true
+  },
+  status: {
+    type: String,
+    default: "Hazırlanıyor"
+  },
   createdAt: {
     type: Date,
     default: Date.now

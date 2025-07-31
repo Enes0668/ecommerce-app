@@ -2,31 +2,38 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const Product = require('../models/Product');
 const mongoose = require('mongoose');
 
 // Sipariş oluşturma
 router.post('/create', async (req, res) => {
   try {
-    const { userId } = req.body;
-
+    const { userId, items } = req.body;
+    let totalPrice = 0;
     // Kullanıcının sepetinden ürünleri al
     const cartItems = await Cart.find({ userId });
 
     if (cartItems.length === 0) {
       return res.status(400).json({ message: "Sepet boş" });
     }
-
+    for (const item of items) {
+      const product = await Product.findById(item.productId);
+      if (!product) {
+        return res.status(404).json({ message: 'Ürün bulunamadı' });
+      }
+      totalPrice += product.price * item.quantity;
+    }
     // Siparişi oluştur
     const order = new Order({
-      userId,
-      items: cartItems.map(item => ({
-        productId: item.productId,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity
-      }))
+    userId,
+    items: cartItems.map(item => ({
+    productId: item.productId,
+    name: item.name,
+    price: item.price,
+    quantity: item.quantity
+    })),
+   totalPrice // 👈 bunu ekliyoruz!
     });
-
     await order.save();
 
     // Sepeti temizle
@@ -54,10 +61,12 @@ router.get('/history/:userId', async (req, res) => {
 
 router.get('/user/:userId', async (req, res) => {
   try {
-    const orders = await Order.find({ userId: req.params.userId }).sort({ createdAt: -1 });
-    res.status(200).json(orders);
-  } catch (error) {
-    res.status(500).json({ message: 'Siparişler getirilemedi' });
+    const orders = await Order.find({ userId: req.params.userId })
+      .populate('items.productId'); // 👈 Burada populate yaptık
+    res.json(orders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Siparişler alınamadı.' });
   }
 });
 
