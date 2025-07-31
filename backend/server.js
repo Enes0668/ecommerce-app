@@ -45,12 +45,20 @@ async function saveOtpToDB(email, otp) {
 
 // --- ÜRÜNLER ROUTE ---
 app.get('/api/products', async (req, res) => {
-    try {
-        const products = await Product.find({});
-        res.json(products);
-    } catch (err) {
-        res.status(500).json({ message: 'Ürünler getirilemedi' });
+  try {
+    const { category } = req.query;
+    let filter = {};
+
+    // Eğer category parametresi geldiyse, filtreye ekle
+    if (category) {
+      filter.category = category;
     }
+
+    const products = await Product.find(filter).populate('category');
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: 'Ürünler getirilemedi' });
+  }
 });
 
 app.post('/api/products', async (req, res) => {

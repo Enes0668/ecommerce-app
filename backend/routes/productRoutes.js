@@ -1,26 +1,48 @@
 const express = require('express');
+const mongoose = require('mongoose'); // mongoose'yi import et
 const router = express.Router();
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 
-// Tüm ürünleri getir
 router.get('/', async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
-});
-
-// ID'ye göre ürün getir
-router.get('/:id', async (req, res) => {
-    const product = await Product.findById(req.params.id);
-    res.json(product);
-});
-
-router.post('/api/products', async (req, res) => {
   try {
-    const { name, price, description } = req.body;
+    const categoryId = req.query.category;
+    let filter = {};
 
-    // Eğer categoryName id ise, önce kategoriyi bul
-    const category = await Category.findById(category);
-    if (!category) {
+    if (categoryId) {
+      filter.category = categoryId;  // Sadece seçili kategoriyi filtrele
+    }
+
+    const products = await Product.find(filter).populate('category');
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: 'Ürünler alınamadı' });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).populate('category');
+    if (!product) {
+      return res.status(404).json({ message: 'Ürün bulunamadı' });
+    }
+    res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Ürün alınırken hata oluştu' });
+  }
+});
+
+router.post('/', async (req, res) => {
+  try {
+    const { name, price, description, category } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(category)) {
+      return res.status(400).json({ message: 'Geçersiz kategori ID' });
+    }
+
+    const existingCategory = await Category.findById(category);
+    if (!existingCategory) {
       return res.status(400).json({ message: 'Kategori bulunamadı' });
     }
 
@@ -28,7 +50,7 @@ router.post('/api/products', async (req, res) => {
       name,
       price,
       description,
-      category: category._id,  // Burada kategori adını kaydediyoruz
+      category: existingCategory._id,
     });
 
     await product.save();
@@ -38,6 +60,5 @@ router.post('/api/products', async (req, res) => {
     res.status(500).json({ message: 'Ürün oluşturulurken hata oluştu' });
   }
 });
-
 
 module.exports = router;
