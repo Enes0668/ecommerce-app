@@ -1,14 +1,30 @@
 import { useState } from "react";
 
+function calculatePasswordStrength(password) {
+  let score = 0;
+  if (!password) return score;
+
+  if (password.length >= 8) score += 1;
+  if (/[A-Z]/.test(password)) score += 1;
+  if (/[a-z]/.test(password)) score += 1;
+  if (/\d/.test(password)) score += 1;
+  if (/[\W_]/.test(password)) score += 1;
+
+  return score; // 0 - 5 arası puan
+}
+
 export default function Register() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
     address: "",
     phone: "",
   });
+
   const [message, setMessage] = useState("");
+  const [messageColor, setMessageColor] = useState("black");
 
   const handleChange = (e) => {
     setFormData({
@@ -17,30 +33,83 @@ export default function Register() {
     });
   };
 
+  const passwordStrength = calculatePasswordStrength(formData.password);
+
+  const getProgressColor = () => {
+    switch (passwordStrength) {
+      case 0:
+      case 1:
+        return "red";
+      case 2:
+      case 3:
+        return "orange";
+      case 4:
+        return "yellowgreen";
+      case 5:
+        return "green";
+      default:
+        return "transparent";
+    }
+  };
+
+  const isStrongPassword = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return regex.test(password);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    if (!isStrongPassword(formData.password)) {
+      setMessage(
+        "Şifre en az 8 karakter olmalı, büyük harf, küçük harf, rakam ve özel karakter içermeli."
+      );
+      setMessageColor("red");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setMessage("Şifreler uyuşmuyor.");
+      setMessageColor("red");
+      return;
+    }
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          address: formData.address,
+          phone: formData.phone,
+        }),
       });
-      
+
+      const data = await res.json();
+
       if (res.ok) {
-        const data = await res.json();
-        console.log(data);
-        setMessage('Kayıt başarılı!');
-        setFormData({ username: "", email: "", password: "", address: "", phone: "" });
+        setMessage("Kayıt başarılı!");
+        setMessageColor("green");
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          address: "",
+          phone: "",
+        });
       } else {
-        setMessage('Kayıt olurken hata oluştu.');
+        setMessage(data.message || "Kayıt olurken hata oluştu.");
+        setMessageColor("red");
       }
     } catch (err) {
       console.error(err);
-      setMessage('Sunucu hatası.');
+      setMessage("Sunucu hatası.");
+      setMessageColor("red");
     }
   };
 
@@ -72,10 +141,38 @@ export default function Register() {
           onChange={handleChange}
           required
         />
+        {/* Şifre güç göstergesi */}
+        <div
+          style={{
+            height: 10,
+            backgroundColor: "#ddd",
+            borderRadius: 5,
+            marginBottom: 10,
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              width: `${(passwordStrength / 5) * 100}%`,
+              height: "100%",
+              backgroundColor: getProgressColor(),
+              transition: "width 0.3s",
+            }}
+          />
+        </div>
+
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
         <input
           type="text"
           name="address"
-          placeholder="address"
+          placeholder="Address"
           value={formData.address}
           onChange={handleChange}
           required
@@ -83,14 +180,14 @@ export default function Register() {
         <input
           type="text"
           name="phone"
-          placeholder="phone"
+          placeholder="Phone"
           value={formData.phone}
           onChange={handleChange}
           required
         />
         <button type="submit">Register</button>
       </form>
-      <p>{message}</p>
+      <p style={{ color: messageColor }}>{message}</p>
     </div>
   );
 }

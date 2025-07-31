@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 export default function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const userId = localStorage.getItem('userId');
-
+  
   useEffect(() => {
     fetch(`http://localhost:5000/api/orders/user/${userId}`)
       .then(res => res.json())
@@ -19,6 +19,7 @@ export default function OrderHistory() {
       ) : (
         orders.map(order => (
           <div key={order._id} style={{ border: '1px solid gray', margin: '10px', padding: '10px' }}>
+            <p><strong>İsim:</strong> {name}</p>
             <p><strong>Sipariş ID:</strong> {order._id}</p>
             <p><strong>Tarih:</strong> {new Date(order.createdAt).toLocaleString()}</p>
             <p><strong>Toplam Fiyat:</strong> {order.totalPrice} ₺</p>

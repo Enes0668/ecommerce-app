@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/email');
 const OtpModel = require('../models/Otp'); // OTP için model, eğer varsa
+const { body, validationResult } = require('express-validator');
 
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -78,46 +79,137 @@ router.post("/reset-password", async (req, res) => {
 });
 
 // Kayıt olma
-router.post('/register', async (req, res) => {
-  try {
-    const { username, email, password, address, phone } = req.body;
+router.post(
+  "/register",
+  [
+    // 🔐 VALIDATION KURALLARI
+    body("username")
+      .notEmpty().withMessage("Kullanıcı adı boş bırakılamaz.")
+      .isLength({ min: 3 }).withMessage("Kullanıcı adı en az 3 karakter olmalı."),
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "Bu email zaten kayıtlı." });
+    body("email")
+      .notEmpty().withMessage("Email gerekli.")
+      .isEmail().withMessage("Geçerli bir e-posta giriniz."),
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    body("password")
+      .notEmpty().withMessage("Şifre boş bırakılamaz.")
+      .isLength({ min: 8 }).withMessage("Şifre en az 8 karakter olmalı.")
+      .matches(/[A-Z]/).withMessage("Şifre en az bir büyük harf içermeli.")
+      .matches(/[a-z]/).withMessage("Şifre en az bir küçük harf içermeli.")
+      .matches(/\d/).withMessage("Şifre en az bir rakam içermeli.")
+      .matches(/[\W_]/).withMessage("Şifre en az bir özel karakter içermeli."),
 
-    const newUser = new User({ username, email, password: hashedPassword, address, phone });
-    await newUser.save();
+    body("confirmPassword")
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error("Şifreler uyuşmuyor.");
+        }
+        return true;
+      }),
 
-    res.status(201).json({ message: "Kullanıcı başarıyla oluşturuldu." });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    body("phone")
+      .optional()
+      .isMobilePhone().withMessage("Geçerli bir telefon numarası giriniz."),
+
+    body("address")
+      .optional()
+      .isLength({ min: 5 }).withMessage("Adres en az 5 karakter olmalı.")
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // ❌ Validasyon hatalarını gönder
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { username, email, password, address, phone } = req.body;
+
+      // 📛 Aynı e-posta daha önce kayıtlı mı?
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ message: "Bu email zaten kayıtlı." });
+      }
+
+      // 🔐 Şifreyi hashle
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      // 🧑 Yeni kullanıcı oluştur
+      const newUser = new User({
+        username,
+        email,
+        password: hashedPassword,
+        address,
+        phone,
+      });
+
+      await newUser.save();
+      res.status(201).json({ message: "Kullanıcı başarıyla oluşturuldu." });
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Sunucu hatası." });
+    }
   }
-});
+);
+
+module.exports = router;
 
 // Giriş yapma
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
+router.post(
+  "/login",
+  [
+    // Validasyon kuralları
+    body("email")
+      .notEmpty().withMessage("Email alanı boş bırakılamaz.")
+      .isEmail().withMessage("Geçerli bir e-posta adresi giriniz."),
+    body("password")
+      .notEmpty().withMessage("Şifre boş bırakılamaz.")
+  ],
+  async (req, res) => {
+    // Validasyon hataları varsa döndür
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Email veya şifre yanlış." });
+    try {
+      const { email, password } = req.body;
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Email veya şifre yanlış." });
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: "Email veya şifre yanlış." });
+      }
 
-    const token = jwt.sign(
-      { userId: user._id, username: user.username },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
+      const isMatch = await bcrypt.compare(password, user.passwordHash);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Email veya şifre yanlış." });
+      }
 
-    res.json({ token, username: user.username });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+      const token = jwt.sign(
+        {
+          userId: user._id,
+          username: user.username
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+      );
+
+      res.status(200).json({
+        message: "Giriş başarılı.",
+        token,
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Sunucu hatası." });
+    }
   }
-});
+);
 
 module.exports = router;
