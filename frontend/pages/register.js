@@ -141,6 +141,15 @@ export default function Register() {
           onChange={handleChange}
           required
         />
+        
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
         {/* Şifre güç göstergesi */}
         <div
           style={{
@@ -160,15 +169,6 @@ export default function Register() {
             }}
           />
         </div>
-
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
         <input
           type="text"
           name="address"
