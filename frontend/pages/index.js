@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { ProductContext } from '../context/ProductContext';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -74,6 +75,7 @@ export default function Home() {
     window.location.href = '/login';
   };
 
+  
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Ürünler</h1>

@@ -73,4 +73,43 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, price, description, imageUrl } = req.body;
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { name, price, description, imageUrl },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: 'Ürün bulunamadı' });
+    }
+
+    res.json(updatedProduct);
+  } catch (err) {
+    console.error('Güncelleme hatası:', err);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    // Ürünü sil
+    const deleted = await Product.findByIdAndDelete(productId);
+
+    if (!deleted) {
+      return res.status(404).json({ message: 'Ürün bulunamadı' });
+    }
+
+    res.json({ message: 'Ürün başarıyla silindi' });
+  } catch (err) {
+    console.error('Silme hatası:', err);
+    res.status(500).json({ message: 'Sunucu hatası' });
+  }
+});
+
 module.exports = router;
