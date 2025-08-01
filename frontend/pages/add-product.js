@@ -7,57 +7,70 @@ export default function AddProduct() {
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(''); // yeni
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
-  axios.get('http://localhost:5000/api/categories')
-    .then(res => {
-      console.log('Kategori verisi:', res.data); // Burayı ekle
-      setCategories(res.data);
-    })
-    .catch(err => console.error('Kategori yüklenirken hata:', err));
-}, []);
+    axios.get('http://localhost:5000/api/categories')
+      .then(res => {
+        setCategories(res.data);
+      })
+      .catch(err => {
+        console.error('Kategori yüklenirken hata:', err);
+        setMessage('Kategori verileri alınamadı.');
+      });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // selectedCategory id’sini backend’e gönderiyoruz
-    const res = await fetch('http://localhost:5000/api/products', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-      name, 
-      price: Number(price), 
-      description, 
-      category: selectedCategory  // eklendi
-      }),
-    });
+    try {
+      const res = await fetch('http://localhost:5000/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          name, 
+          price: Number(price), 
+          description, 
+          category: selectedCategory,
+          imageUrl
+        }),
+      });
 
-    if (res.ok) {
-      setMessage('Ürün başarıyla eklendi!');
-      setName('');
-      setPrice('');
-      setDescription('');
-      setSelectedCategory(''); // seçimi sıfırla
-    } else {
-      setMessage('Ürün eklenirken hata oluştu!');
+      if (res.ok) {
+        setMessage('✅ Ürün başarıyla eklendi!');
+        setName('');
+        setPrice('');
+        setDescription('');
+        setSelectedCategory('');
+        setImageUrl('');
+      } else {
+        const data = await res.json();
+        setMessage(`❌ Hata: ${data.message || 'Ürün eklenemedi.'}`);
+      }
+    } catch (error) {
+      console.error('Sunucu hatası:', error);
+      setMessage('❌ Sunucu hatası!');
     }
   };
 
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Ürün Ekle</h1>
+
       <form onSubmit={handleSubmit}>
         <div>
           <label>İsim:</label>
           <input value={name} onChange={e => setName(e.target.value)} required />
         </div>
+
         <div>
           <label>Fiyat:</label>
           <input type="number" value={price} onChange={e => setPrice(e.target.value)} required />
         </div>
+
         <div>
           <label>Açıklama:</label>
           <textarea value={description} onChange={e => setDescription(e.target.value)} required />
@@ -77,9 +90,27 @@ export default function AddProduct() {
           </select>
         </div>
 
-        <button type="submit">Ekle</button>
+        <div>
+          <label>Resim URL:</label>
+          <input
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            required
+          />
+        </div>
+
+        {/* Görsel önizleme */}
+        {imageUrl && (
+          <div style={{ marginTop: '10px' }}>
+            <img src={imageUrl} alt="Önizleme" width="200" />
+          </div>
+        )}
+
+        <button type="submit">Ürün Ekle</button>
       </form>
-      {message && <p>{message}</p>}
+
+      {message && <p style={{ marginTop: '1rem', color: 'red' }}>{message}</p>}
     </div>
   );
 }

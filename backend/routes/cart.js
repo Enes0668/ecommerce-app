@@ -26,7 +26,7 @@ router.get("/user/:userId", async (req, res) => {
 // Sepete ürün ekleme
 router.post('/cart', async (req, res) => {
   try {
-    const { userId, productId, name, price, category } = req.body;
+    const { userId, productId, name, price } = req.body;
 
     let existingItem = await Cart.findOne({ userId, productId });
 

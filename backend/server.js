@@ -16,6 +16,7 @@ const categoryRoutes = require('./routes/category');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const app = express();
 const OtpModel = require('./models/Otp');
+const productRoutes = require('./routes/productRoutes');
 app.use(cors());
 app.use(express.json());
 const authRoutes = require('./routes/auth');
@@ -34,6 +35,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // --- ROUTER ---
 app.use('/api/cart', cartRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/products', productRoutes);
 
 async function saveOtpToDB(email, otp) {
   // Aynı email için eski OTP'leri sil (opsiyonel)

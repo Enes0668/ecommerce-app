@@ -22,20 +22,20 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate('category');
+    const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ message: 'Ürün bulunamadı' });
     }
     res.json(product);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Ürün alınırken hata oluştu' });
+    res.status(500).json({ message: 'Sunucu hatası' });
   }
 });
 
 router.post('/', async (req, res) => {
   try {
-    const { name, price, description, category } = req.body;
+    const { name, price, description, category, imageUrl } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(category)) {
       return res.status(400).json({ message: 'Geçersiz kategori ID' });
@@ -51,6 +51,7 @@ router.post('/', async (req, res) => {
       price,
       description,
       category: existingCategory._id,
+      imageUrl,
     });
 
     await product.save();
@@ -58,6 +59,17 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Ürün oluşturulurken hata oluştu' });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: 'Ürün bulunamadı' });
+    res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Sunucu hatası' });
   }
 });
 
