@@ -70,6 +70,7 @@ export default function AdminPanel() {
           ))}
         </tbody>
       </table>
+      <button onClick={() => router.push('/admin/orders')}>Siparişler</button>
     </div>
   );
 }

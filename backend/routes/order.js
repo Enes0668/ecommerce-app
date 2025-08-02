@@ -70,6 +70,19 @@ router.get('/user/:userId', async (req, res) => {
   }
 });
 
+router.get('/all', async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .sort({ createdAt: -1 })
+      .populate('items.productId') // ✔ Ürün bilgilerini getir
+      .populate('userId', 'username email');
+      console.log(orders);
+    res.json(orders);
+  } catch (err) {
+    console.error('Sipariş alma hatası:', err);
+    res.status(500).json({ message: 'Siparişler alınamadı' });
+  }
+});
 // GET /api/orders/:userId - Belirli kullanıcının tüm siparişlerini getirir
 
 
