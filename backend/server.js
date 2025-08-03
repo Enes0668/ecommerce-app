@@ -13,6 +13,7 @@ const { ObjectId } = require('mongodb');
 const protectedRoute = require('./routes/protectedRoute');
 const orderRoutes = require('./routes/order');
 const categoryRoutes = require('./routes/category');
+const userRoutes = require('./routes/userRoutes');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const app = express();
 const OtpModel = require('./models/Otp');
@@ -23,6 +24,7 @@ const authRoutes = require('./routes/auth');
 app.use('/api/orders', orderRoutes);
 app.use('/api', authRoutes);
  app.use('/protected', protectedRoute);
+ app.use('/api/users', userRoutes);
 // --- MONGO DB BAĞLANTISI ---
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

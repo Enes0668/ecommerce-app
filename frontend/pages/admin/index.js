@@ -49,6 +49,8 @@ export default function AdminPanel() {
     <div style={{ padding: '2rem' }}>
       <h1>Admin Paneli</h1>
       <button onClick={() => router.push('/admin/products/add')}>+ Yeni Ürün Ekle</button>
+      <button onClick={() => router.push('/admin/orders')}>Siparişler</button>
+      <button onClick={() => router.push('/admin/users')}>Kullanıcılar</button>
       <table border="1" cellPadding="10" style={{ marginTop: '1rem', width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -70,7 +72,6 @@ export default function AdminPanel() {
           ))}
         </tbody>
       </table>
-      <button onClick={() => router.push('/admin/orders')}>Siparişler</button>
     </div>
   );
 }
