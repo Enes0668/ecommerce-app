@@ -1,0 +1,57 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 2rem;
+  background-color: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #222;
+  margin-bottom: 2rem;
+}
+
+.noOrders {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #777;
+  margin-top: 3rem;
+}
+
+.orderCard {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.orderCard:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.orderCard p {
+  margin: 0.3rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.itemList {
+  margin-top: 1rem;
+  padding-left: 20px;
+}
+
+.item {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+.item strong {
+  color: #0070f3;
+}

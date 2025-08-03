@@ -1,37 +1,40 @@
 import { useEffect, useState } from 'react';
+import styles from './styles/OrderHistory.module.css';
 
 export default function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const userId = localStorage.getItem('userId');
-  
+
   useEffect(() => {
     fetch(`http://localhost:5000/api/orders/user/${userId}`)
       .then(res => res.json())
       .then(data => {
-      console.log(data);  // gelen veriyi burada kontrol et
-      setOrders(data);
-    })
+        console.log(data);
+        setOrders(data);
+      })
       .catch(err => console.error('Siparişler alınamadı:', err));
   }, [userId]);
 
   return (
-    <div>
-      <h1>Sipariş Geçmişi</h1>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Sipariş Geçmişi</h1>
       {orders.length === 0 ? (
-        <p>Henüz siparişiniz yok.</p>
+        <p className={styles.emptyText}>Henüz siparişiniz yok.</p>
       ) : (
         orders.map(order => (
-          <div key={order._id} style={{ border: '1px solid gray', margin: '10px', padding: '10px' }}>
-            <p><strong>Sipariş ID:</strong> {order._id}</p>
-            <p><strong>Tarih:</strong> {new Date(order.createdAt).toLocaleString()}</p>
-            <p><strong>Toplam Fiyat:</strong> {order.totalPrice} ₺</p>
-            <p><strong>Durum:</strong> {order.status}</p>
+          <div key={order._id} className={styles.orderCard}>
+            <p className={styles.orderInfo}><strong>Sipariş ID:</strong> {order._id}</p>
+            <p className={styles.orderInfo}><strong>Tarih:</strong> {new Date(order.createdAt).toLocaleString()}</p>
+            <p className={styles.orderInfo}><strong>Toplam Fiyat:</strong> {order.totalPrice} ₺</p>
+            <p className={styles.orderInfo}><strong>Durum:</strong> {order.status}</p>
             <div>
               <strong>Ürünler:</strong>
-              <ul>
-                {order.items.map(item => (
-                  <li key={item.productId}>
-                    {item.productId.name} - {item.quantity} x {item.productId.price} ₺
+              <ul className={styles.orderItems}>
+                {order.items.map((item, index) => (
+                  <li key={index} className={styles.item}>
+                    {item.productId
+                      ? `${item.productId.name} - ${item.quantity} x ${item.productId.price} ₺`
+                      : 'Ürün silinmiş veya bulunamadı.'}
                   </li>
                 ))}
               </ul>

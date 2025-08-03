@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import styles from './styles/AddProduct.module.css';
 
 export default function AddProduct() {
   const [name, setName] = useState('');
@@ -12,9 +13,7 @@ export default function AddProduct() {
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/categories')
-      .then(res => {
-        setCategories(res.data);
-      })
+      .then(res => setCategories(res.data))
       .catch(err => {
         console.error('Kategori yüklenirken hata:', err);
         setMessage('Kategori verileri alınamadı.');
@@ -27,13 +26,11 @@ export default function AddProduct() {
     try {
       const res = await fetch('http://localhost:5000/api/products', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          name, 
-          price: Number(price), 
-          description, 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          price: Number(price),
+          description,
           category: selectedCategory,
           imageUrl
         }),
@@ -57,30 +54,44 @@ export default function AddProduct() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Ürün Ekle</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Ürün Ekle</h1>
 
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className={styles.formGroup}>
           <label>İsim:</label>
-          <input value={name} onChange={e => setName(e.target.value)} required />
+          <input
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+          />
         </div>
 
-        <div>
+        <div className={styles.formGroup}>
           <label>Fiyat:</label>
-          <input type="number" value={price} onChange={e => setPrice(e.target.value)} required />
+          <input
+            type="number"
+            value={price}
+            onChange={e => setPrice(e.target.value)}
+            required
+          />
         </div>
 
-        <div>
+        <div className={styles.formGroup}>
           <label>Açıklama:</label>
-          <textarea value={description} onChange={e => setDescription(e.target.value)} required />
+          <textarea
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            required
+          />
         </div>
 
-        <div>
+        <div className={styles.formGroup}>
           <label>Kategori:</label>
-          <select 
-            value={selectedCategory} 
-            onChange={e => setSelectedCategory(e.target.value)} 
+          <select
+            value={selectedCategory}
+            onChange={e => setSelectedCategory(e.target.value)}
             required
           >
             <option value="">Kategori seçiniz</option>
@@ -90,27 +101,32 @@ export default function AddProduct() {
           </select>
         </div>
 
-        <div>
+        <div className={styles.formGroup}>
           <label>Resim URL:</label>
           <input
             type="text"
             value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
+            onChange={e => setImageUrl(e.target.value)}
             required
           />
         </div>
 
-        {/* Görsel önizleme */}
         {imageUrl && (
-          <div style={{ marginTop: '10px' }}>
-            <img src={imageUrl} alt="Önizleme" width="200" />
+          <div className={styles.imagePreview}>
+            <img src={imageUrl} alt="Önizleme" />
           </div>
         )}
 
         <button type="submit">Ürün Ekle</button>
       </form>
 
-      {message && <p style={{ marginTop: '1rem', color: 'red' }}>{message}</p>}
+      {message && (
+        <p
+          className={`${styles.message} ${message.startsWith('✅') ? styles.success : ''}`}
+        >
+          {message}
+        </p>
+      )}
     </div>
   );
 }

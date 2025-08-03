@@ -1,6 +1,6 @@
-// pages/admin/index.js
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import styles from '../../pages/styles/AdminPanel.module.css';
 
 export default function AdminPanel() {
   const [products, setProducts] = useState([]);
@@ -8,7 +8,6 @@ export default function AdminPanel() {
   const router = useRouter();
 
   useEffect(() => {
-    // Oturum kontrolü örneği (token varsa vs.)
     const token = localStorage.getItem('adminToken');
     if (!token) {
       alert('Bu sayfayı görüntülemek için giriş yapmalısınız.');
@@ -26,7 +25,7 @@ export default function AdminPanel() {
         console.error('Ürünler yüklenemedi:', err);
         setLoading(false);
       });
-  }, []);
+  }, [router]);
 
   const handleDelete = async (id) => {
     if (!confirm('Silmek istediğinize emin misiniz?')) return;
@@ -43,35 +42,66 @@ export default function AdminPanel() {
     }
   };
 
-  if (loading) return <div>Yükleniyor...</div>;
+  if (loading) return <div className={styles.loading}>Yükleniyor...</div>;
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Admin Paneli</h1>
-      <button onClick={() => router.push('/admin/products/add')}>+ Yeni Ürün Ekle</button>
-      <button onClick={() => router.push('/admin/orders')}>Siparişler</button>
-      <button onClick={() => router.push('/admin/users')}>Kullanıcılar</button>
-      <table border="1" cellPadding="10" style={{ marginTop: '1rem', width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th>İsim</th>
-            <th>Fiyat</th>
-            <th>Aksiyonlar</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map(product => (
-            <tr key={product._id}>
-              <td>{product.name}</td>
-              <td>{product.price} ₺</td>
-              <td>
-                <button onClick={() => router.push(`/admin/products/edit/${product._id}`)}>Düzenle</button>
-                <button onClick={() => handleDelete(product._id)} style={{ marginLeft: '1rem' }}>Sil</button>
-              </td>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Admin Paneli</h1>
+      <div className={styles.buttons}>
+        <button
+          className={styles.button}
+          onClick={() => router.push('/admin/products/add')}
+        >
+          + Yeni Ürün Ekle
+        </button>
+        <button
+          className={styles.button}
+          onClick={() => router.push('/admin/orders')}
+        >
+          Siparişler
+        </button>
+        <button
+          className={styles.button}
+          onClick={() => router.push('/admin/users')}
+        >
+          Kullanıcılar
+        </button>
+      </div>
+
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>İsim</th>
+              <th>Fiyat</th>
+              <th>Aksiyonlar</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {products.map(product => (
+              <tr key={product._id}>
+                <td>{product.name}</td>
+                <td>{product.price} ₺</td>
+                <td className={styles.actionButtons}>
+                  <button
+                    onClick={() =>
+                      router.push(`/admin/products/edit/${product._id}`)
+                    }
+                  >
+                    Düzenle
+                  </button>
+                  <button
+                    className="delete"
+                    onClick={() => handleDelete(product._id)}
+                  >
+                    Sil
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

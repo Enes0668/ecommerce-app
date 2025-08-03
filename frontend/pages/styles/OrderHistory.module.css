@@ -1,0 +1,40 @@
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.orderCard {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background-color: #f9f9f9;
+}
+
+.orderInfo {
+  margin: 0.5rem 0;
+}
+
+.orderItems {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.item {
+  margin: 0.25rem 0;
+}
+
+.emptyText {
+  text-align: center;
+  font-style: italic;
+  color: gray;
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import styles from './styles/Login.module.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -22,22 +23,20 @@ export default function Login() {
         return;
       }
 
-      // Başarılı girişte bilgileri localStorage'a kaydet
       localStorage.setItem('token', data.token);
       localStorage.setItem('userId', data.userId);
       localStorage.setItem('username', data.username);
-      
-      // Ana sayfaya yönlendir
+
       router.push('/');
     } catch (error) {
       console.error('Login hatası:', error);
       setErrorMessage('Sunucu hatası, lütfen tekrar deneyin.');
     }
   };
-  
+
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Giriş Yap</h1>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Giriş Yap</h1>
 
       <input
         type="email"
@@ -46,7 +45,7 @@ export default function Login() {
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        style={{ display: 'block', marginBottom: '1rem', width: '100%', padding: '0.5rem' }}
+        className={styles.input}
       />
 
       <input
@@ -56,31 +55,21 @@ export default function Login() {
         placeholder="Şifre"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        style={{ display: 'block', marginBottom: '1rem', width: '100%', padding: '0.5rem' }}
+        className={styles.input}
       />
 
-      <button onClick={handleLogin} style={{ padding: '0.5rem 1rem', marginBottom: '1rem' }}>
+      <button onClick={handleLogin} className={styles.button}>
         Giriş Yap
       </button>
 
-      <p style={{ marginTop: '10px' }}>
+      <p className={styles.linkText}>
         Şifrenizi mi unuttunuz?{' '}
-        <button
-          onClick={() => router.push('/forgot-password')}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'blue',
-            textDecoration: 'underline',
-            cursor: 'pointer',
-            padding: 0,
-          }}
-        >
+        <button onClick={() => router.push('/forgot-password')} className={styles.linkButton}>
           Şifremi unuttum
         </button>
       </p>
 
-      {errorMessage && <p style={{ color: 'red', marginTop: '1rem' }}>{errorMessage}</p>}
+      {errorMessage && <p className={styles.error}>{errorMessage}</p>}
     </div>
   );
 }

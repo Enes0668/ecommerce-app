@@ -1,0 +1,96 @@
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 2rem;
+  background-color: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.formGroup {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* label global ama .formGroup içine bağlanmış */
+.formGroup :global(label) {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* input, textarea, select global ama .formGroup içine bağlanmış */
+.formGroup :global(input[type="text"]),
+.formGroup :global(input[type="number"]),
+.formGroup :global(textarea),
+.formGroup :global(select) {
+  padding: 8px 10px;
+  font-size: 1rem;
+  border: 1.8px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+.formGroup :global(input[type="text"]:focus),
+.formGroup :global(input[type="number"]:focus),
+.formGroup :global(textarea:focus),
+.formGroup :global(select:focus) {
+  border-color: #0070f3;
+  outline: none;
+}
+
+.formGroup :global(textarea) {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.imagePreview {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.imagePreview :global(img) {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* button global ama .container içine bağlanmış */
+.container :global(button) {
+  margin-top: 1rem;
+  width: 100%;
+  background-color: #0070f3;
+  color: white;
+  font-size: 1.1rem;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.container :global(button:hover) {
+  background-color: #005bb5;
+}
+
+.message {
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 600;
+  color: red;
+}
+
+.message.success {
+  color: green;
+}

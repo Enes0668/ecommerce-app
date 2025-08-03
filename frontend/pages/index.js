@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'; // yönlendirme için
 
-import styles from './Home.module.css';
+import styles from './styles/Home.module.css';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -87,7 +87,8 @@ export default function Home() {
 
       {message && <div className={styles.message}>{message}</div>}
 
-      <div className={styles.filter}>
+        <div className={styles.linksContainer}>
+          <div className={styles.filter}>
         <label htmlFor="category">Kategori Seç: </label>
         <select
           id="category"
@@ -102,8 +103,6 @@ export default function Home() {
             </option>
           ))}
         </select>
-
-        <div className={styles.linksContainer}>
           <Link href="/cart" className={styles.linkBtn}>Sepetim</Link> 
           <Link href="/OrderHistory" className={styles.linkBtn}>Sipariş Geçmişi</Link>
           <button onClick={handleLogout} className={styles.logoutBtn}>Çıkış Yap</button>

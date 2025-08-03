@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import styles from './styles/ResetPasswordStep.module.css';
 
 export default function ResetPasswordStep({ otp }) {
   const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [email, setEmail] = useState(null); // email state
+  const [email, setEmail] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function ResetPasswordStep({ otp }) {
       });
       console.log(response.data);
       setMessage('Şifreniz başarıyla güncellendi.');
-      router.push("/login");
+      setTimeout(() => router.push("/login"), 1500); // kısa gecikme ile yönlendirme
     } catch (err) {
       console.error("Hata:", err.response?.data || err.message);
       setMessage('Şifre güncellenemedi.');
@@ -35,16 +36,20 @@ export default function ResetPasswordStep({ otp }) {
   };
 
   return (
-    <div>
-      <h2>Yeni Şifrenizi Girin</h2>
+    <div className={styles.container}>
+      <h2 className={styles.heading}>Yeni Şifrenizi Girin</h2>
       <input
         type="password"
         placeholder="Yeni şifre"
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
+        className={styles.input}
+        required
       />
-      <button onClick={handleReset}>Şifreyi Güncelle</button>
-      <p>{message}</p>
+      <button onClick={handleReset} className={styles.button}>
+        Şifreyi Güncelle
+      </button>
+      {message && <p className={styles.message}>{message}</p>}
     </div>
   );
 }

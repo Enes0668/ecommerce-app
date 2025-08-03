@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./styles/Register.module.css"; // CSS modülünü import et
 
 function calculatePasswordStrength(password) {
   let score = 0;
@@ -114,16 +115,17 @@ export default function Register() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "auto", paddingTop: 50 }}>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Kayıt Ol</h2>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="text"
           name="username"
-          placeholder="Username"
+          placeholder="Kullanıcı adı"
           value={formData.username}
           onChange={handleChange}
           required
+          className={styles.input}
         />
         <input
           type="email"
@@ -132,62 +134,64 @@ export default function Register() {
           value={formData.email}
           onChange={handleChange}
           required
+          className={styles.input}
         />
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Şifre"
           value={formData.password}
           onChange={handleChange}
           required
+          className={styles.input}
         />
-        
         <input
           type="password"
           name="confirmPassword"
-          placeholder="Confirm Password"
+          placeholder="Şifre tekrar"
           value={formData.confirmPassword}
           onChange={handleChange}
           required
+          className={styles.input}
         />
+
         {/* Şifre güç göstergesi */}
-        <div
-          style={{
-            height: 10,
-            backgroundColor: "#ddd",
-            borderRadius: 5,
-            marginBottom: 10,
-            overflow: "hidden",
-          }}
-        >
+        <div className={styles.strengthBar}>
           <div
+            className={styles.strengthBarFill}
             style={{
               width: `${(passwordStrength / 5) * 100}%`,
-              height: "100%",
               backgroundColor: getProgressColor(),
-              transition: "width 0.3s",
             }}
           />
         </div>
+
         <input
           type="text"
           name="address"
-          placeholder="Address"
+          placeholder="Adres"
           value={formData.address}
           onChange={handleChange}
           required
+          className={styles.input}
         />
         <input
           type="text"
           name="phone"
-          placeholder="Phone"
+          placeholder="Telefon"
           value={formData.phone}
           onChange={handleChange}
           required
+          className={styles.input}
         />
-        <button type="submit">Register</button>
+
+        <button type="submit" className={styles.submitButton}>
+          Kayıt Ol
+        </button>
       </form>
-      <p style={{ color: messageColor }}>{message}</p>
+      <p className={styles.message} style={{ color: messageColor }}>
+        {message}
+      </p>
     </div>
   );
 }

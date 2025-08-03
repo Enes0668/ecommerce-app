@@ -1,10 +1,11 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import styles from './styles/OTPVerifyStep.module.css';
 
 export default function OTPVerifyStep() {
   const [otp, setOtp] = useState('');
   const router = useRouter();
-  const email = localStorage.getItem('email');
+  const email = typeof window !== 'undefined' ? localStorage.getItem('email') : '';
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -27,15 +28,21 @@ export default function OTPVerifyStep() {
   };
 
   return (
-    <form onSubmit={handleVerify}>
-      <input
-        type="text"
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
-        placeholder="OTP kodunu girin"
-        required
-      />
-      <button type="submit">Doğrula</button>
-    </form>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>OTP Doğrulama</h1>
+      <form onSubmit={handleVerify}>
+        <input
+          type="text"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
+          placeholder="OTP kodunu girin"
+          required
+          className={styles.input}
+        />
+        <button type="submit" className={styles.button}>
+          Doğrula
+        </button>
+      </form>
+    </div>
   );
 }

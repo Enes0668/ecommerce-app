@@ -158,3 +158,18 @@
   justify-content: flex-start; /* veya center */
 }
 
+.addToCartBtn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.addToCartBtn:hover {
+  background-color: #388e3c;
+}
