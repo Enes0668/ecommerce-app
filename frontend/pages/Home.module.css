@@ -1,0 +1,160 @@
+/* Home.module.css */
+
+.container {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #0070f3;
+  text-align: center;
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  background-color: #ffe6e6;
+  color: #cc0000;
+  font-weight: 600;
+  text-align: center;
+}
+
+.filter {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter label {
+  font-weight: 600;
+}
+
+.filter select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.productList {
+  list-style: none;
+  padding: 0;
+}
+
+.productItem {
+  padding: 1rem 1.25rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #f9f9f9;
+  transition: box-shadow 0.2s ease;
+}
+
+.productItem:hover {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+}
+
+.productLink {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.productLink:hover {
+  text-decoration: underline;
+}
+
+.category {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.addButton {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: #005bb5;
+}
+
+.links {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.links a, .logoutButton {
+  font-weight: 600;
+  color: #0070f3;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #0070f3;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.links a:hover, .logoutButton:hover {
+  background-color: #0070f3;
+  color: white;
+}
+
+.logoutButton {
+  background: none;
+  border: 1px solid #cc0000;
+  color: #cc0000;
+  margin-top: 1rem;
+}
+
+.logoutButton:hover {
+  background-color: #cc0000;
+  color: white;
+}
+
+.linkBtn {
+  background-color: #1976d2;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 4px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.logoutBtn {
+  background-color: #d32f2f;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.linksContainer {
+  margin-top: 2rem;
+  display: flex;
+  gap: 15px; /* Butonlar arası boşluk */
+  align-items: center;
+  justify-content: flex-start; /* veya center */
+}
+

@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { ProductContext } from '../context/ProductContext';
+import { useRouter } from 'next/router'; // yönlendirme için
+
+import styles from './Home.module.css';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -8,14 +10,19 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [userId, setUserId] = useState(null);
   const [message, setMessage] = useState('');
+  const router = useRouter();
 
-  // LocalStorage userId çek
+  // 🚨 Giriş yapılmamışsa login sayfasına yönlendir
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
-    setUserId(storedUserId);
+    if (!storedUserId) {
+      router.push('/login');
+    } else {
+      setUserId(storedUserId);
+    }
   }, []);
 
-  // Kategorileri getir
+  // Kategorileri al
   useEffect(() => {
     fetch('http://localhost:5000/api/categories')
       .then((res) => res.json())
@@ -23,7 +30,7 @@ export default function Home() {
       .catch(() => console.error('Kategori alınamadı'));
   }, []);
 
-  // Ürünleri getir (kategori seçimine göre)
+  // Ürünleri al
   useEffect(() => {
     let url = 'http://localhost:5000/api/products';
     if (selectedCategoryId) {
@@ -36,7 +43,6 @@ export default function Home() {
       .catch(() => setMessage('Ürünler yüklenemedi, sunucu çalışıyor mu kontrol et.'));
   }, [selectedCategoryId]);
 
-  // Sepete ekleme işlemi
   const handleAddToCart = async (product) => {
     if (!userId) {
       setMessage('Sepete eklemek için giriş yapmalısın.');
@@ -53,7 +59,7 @@ export default function Home() {
           name: product.name,
           price: product.price,
           quantity: 1,
-          category: product.category
+          category: product.category,
         }),
       });
 
@@ -72,27 +78,22 @@ export default function Home() {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = '/login';
+    router.push('/login');
   };
 
-  
   return (
-    <div style={{ padding: '2rem' }}>
+    <div className={styles.container}>
       <h1>Ürünler</h1>
 
-      {message && (
-        <div style={{ marginBottom: '1rem', color: 'red' }}>
-          {message}
-        </div>
-      )}
+      {message && <div className={styles.message}>{message}</div>}
 
-      {/* Kategori filtreleme dropdown */}
-      <div style={{ marginBottom: '1rem' }}>
+      <div className={styles.filter}>
         <label htmlFor="category">Kategori Seç: </label>
         <select
           id="category"
           value={selectedCategoryId}
           onChange={(e) => setSelectedCategoryId(e.target.value)}
+          className={styles.select}
         >
           <option value="">Tüm Kategoriler</option>
           {categories.map((cat) => (
@@ -101,37 +102,30 @@ export default function Home() {
             </option>
           ))}
         </select>
+
+        <div className={styles.linksContainer}>
+          <Link href="/cart" className={styles.linkBtn}>Sepetim</Link> 
+          <Link href="/OrderHistory" className={styles.linkBtn}>Sipariş Geçmişi</Link>
+          <button onClick={handleLogout} className={styles.logoutBtn}>Çıkış Yap</button>
+        </div>
       </div>
 
-      {/* Ürünler listesi */}
-      <ul>
-        {products.map((product) => {
-  console.log(product.category); // sadece log için
-  return (
-    <li key={product._id} style={{ marginBottom: '1rem' }}>
-      <Link href={`/product/${product._id}`}>
-        <strong>{product.name}</strong> - {product.price}₺
-      </Link>
-      <p>Kategori: {product.category?.name || 'Kategori yok'}</p>
-      <button
-        onClick={() => handleAddToCart(product)}
-        style={{ marginTop: '0.5rem', cursor: 'pointer' }}
-      >
-        Sepete Ekle
-      </button>
-      <hr />
-    </li>
-  );
-})}
+      <ul className={styles.productList}>
+        {products.map((product) => (
+          <li key={product._id} className={styles.productItem}>
+            <Link href={`/product/${product._id}`} className={styles.productLink}>
+              <strong>{product.name}</strong> - {product.price}₺
+            </Link>
+            <p>Kategori: {product.category?.name || 'Kategori yok'}</p>
+            <button
+              onClick={() => handleAddToCart(product)}
+              className={styles.addToCartBtn}
+            >
+              Sepete Ekle
+            </button>
+          </li>
+        ))}
       </ul>
-
-      <Link href="/cart">Sepetim</Link>
-      <br />
-      <button onClick={handleLogout} style={{ marginBottom: '1rem' }}>
-        Çıkış Yap
-      </button>
-      <br />
-      <Link href="/OrderHistory">Sipariş Geçmişi</Link>
     </div>
   );
 }
