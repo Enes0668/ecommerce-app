@@ -31,7 +31,7 @@ export default function ForgotPassword() {
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Şifremi Unuttum</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="email"
           placeholder="Email adresinizi girin"

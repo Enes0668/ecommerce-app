@@ -1,57 +1,108 @@
 .container {
-  max-width: 800px;
-  margin: 40px auto;
+  max-width: 900px;
+  margin: 2rem auto;
   padding: 2rem;
-  background-color: #fafafa;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
 }
 
 .title {
   text-align: center;
-  font-size: 2.2rem;
-  color: #222;
+  font-size: 2rem;
+  font-weight: bold;
   margin-bottom: 2rem;
-}
-
-.noOrders {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #777;
-  margin-top: 3rem;
+  color: #222;
 }
 
 .orderCard {
-  background: white;
+  background: #fff;
+  border-left: 6px solid #0070f3;
   border-radius: 8px;
   padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: box-shadow 0.3s ease;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
 }
 
 .orderCard:hover {
-  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  transform: scale(1.01);
 }
 
 .orderCard p {
-  margin: 0.3rem 0;
-  font-size: 1rem;
-  color: #333;
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .itemList {
   margin-top: 1rem;
-  padding-left: 20px;
+  padding-left: 1.5rem;
 }
 
 .item {
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  color: #555;
+  font-size: 0.9rem;
+  padding: 0.2rem 0;
+  color: #444;
 }
 
-.item strong {
-  color: #0070f3;
+.noOrders {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+  font-size: 1rem;
+  padding: 2rem 0;
+}
+
+.message {
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .orderCard {
+    padding: 1.2rem;
+  }
+
+  .orderCard p {
+    font-size: 0.9rem;
+  }
+
+  .item {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .orderCard {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .orderCard p {
+    font-size: 0.85rem;
+  }
 }

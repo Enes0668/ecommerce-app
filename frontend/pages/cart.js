@@ -110,30 +110,39 @@ export default function Cart() {
   };
 
   return (
-  <div className={styles.container}>
-    <h1>Sepetim</h1>
+    <div className={styles.container}>
+      <h1>Sepetim</h1>
 
-    {!Array.isArray(cartItems) || cartItems.length === 0 ? (
-      <p>Sepetiniz boş.</p>
-    ) : (
-      cartItems.map((item) => (
-        <div key={item._id} className={styles.cartItem}>
-          <h3>{item.productId?.name}</h3>
-          <p>Fiyat: {item.productId?.price}₺</p>
-          <p>Adet: {item.quantity}</p>
-          <p>Kategori: {item.productId?.category?.name}</p>
-          <button onClick={() => handleQuantityChange(item._id, item.quantity - 1)}>-</button>
-          <button onClick={() => handleQuantityChange(item._id, item.quantity + 1)}>+</button>
-          <button onClick={() => handleDelete(item._id)}>Sil</button>
-        </div>
-      ))
-    )}
+      {!Array.isArray(cartItems) || cartItems.length === 0 ? (
+        <p>Sepetiniz boş.</p>
+      ) : (
+        cartItems.map((item) => (
+          <div key={item._id} className={styles.cartItem}>
+            <div className={styles.itemInfo}>
+              <h3>{item.productId?.name}</h3>
+              <p>Fiyat: {item.productId?.price}₺</p>
+              <p>Kategori: {item.productId?.category?.name || '-'}</p>
+            </div>
 
-    <h2 className={styles.total}>Toplam: {totalPrice} ₺</h2>
-    <div className={styles.actions}>
-      <button onClick={clearCart}>Sepeti Temizle</button>
-      <button onClick={handleCheckout}>Siparişi Tamamla</button>
+            <div className={styles.itemActions}>
+              <div className={styles.quantity}>
+                <button onClick={() => handleQuantityChange(item._id, item.quantity - 1)}>-</button>
+                <span>{item.quantity}</span>
+                <button onClick={() => handleQuantityChange(item._id, item.quantity + 1)}>+</button>
+              </div>
+              <button className={styles.deleteBtn} onClick={() => handleDelete(item._id)}>Sil</button>
+            </div>
+          </div>
+        ))
+      )}
+
+      <h2 className={styles.total}>Toplam: {totalPrice} ₺</h2>
+
+      <div className={styles.actions}>
+        <button onClick={clearCart} className="btn btn-outline-danger">Sepeti Temizle</button>
+        <button onClick={handleCheckout} className="btn btn-success">Siparişi Tamamla</button>
+      </div>
     </div>
-  </div>
-);
+  );
 }
+

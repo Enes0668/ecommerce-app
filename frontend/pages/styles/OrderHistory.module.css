@@ -1,40 +1,73 @@
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 2rem auto;
   padding: 1rem;
+  background-color: #fefefe;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
 }
 
 .heading {
   text-align: center;
-  margin-bottom: 2rem;
   font-size: 2rem;
-  color: #333;
-}
-
-.orderCard {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
   margin-bottom: 1.5rem;
-  background-color: #f9f9f9;
-}
-
-.orderInfo {
-  margin: 0.5rem 0;
-}
-
-.orderItems {
-  list-style: none;
-  padding-left: 1rem;
-  margin-top: 0.5rem;
-}
-
-.item {
-  margin: 0.25rem 0;
+  color: #333;
 }
 
 .emptyText {
   text-align: center;
-  font-style: italic;
-  color: gray;
+  font-size: 1.2rem;
+  color: #777;
+  margin-top: 3rem;
+}
+
+.orderCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: white;
+  box-shadow: 0 0 5px rgb(0 0 0 / 0.05);
+}
+
+.orderCard p {
+  margin: 0.3rem 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+.orderItems {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+}
+
+.item {
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Responsive */
+
+@media (max-width: 576px) {
+  .container {
+    padding: 0.5rem;
+    margin: 1rem;
+  }
+
+  .heading {
+    font-size: 1.6rem;
+  }
+
+  .orderCard {
+    padding: 1rem;
+  }
+
+  .orderCard p {
+    font-size: 0.9rem;
+  }
+
+  .item {
+    font-size: 0.85rem;
+  }
 }

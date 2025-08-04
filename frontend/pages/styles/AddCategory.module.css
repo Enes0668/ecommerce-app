@@ -1,18 +1,18 @@
 .container {
   max-width: 500px;
-  margin: 40px auto;
+  margin: 3rem auto;
   padding: 2rem;
-  background-color: #fafafa;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
+  background-color: #fdfdfd;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  color: #222;
   margin-bottom: 1.5rem;
-  color: #333;
 }
 
 .formGroup {
@@ -22,16 +22,16 @@
 }
 
 .label {
-  margin-bottom: 6px;
   font-weight: 600;
+  margin-bottom: 0.5rem;
   color: #444;
 }
 
 .input {
-  padding: 8px 10px;
+  padding: 0.75rem 1rem;
   font-size: 1rem;
-  border: 1.8px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
   transition: border-color 0.3s ease;
 }
 
@@ -41,30 +41,49 @@
 }
 
 .btn {
-  padding: 10px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
   background-color: #0070f3;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
   transition: background-color 0.3s ease;
-  width: 100%;
-  margin-top: 1rem;
 }
 
 .btn:hover {
-  background-color: #005bb5;
+  background-color: #005dc1;
 }
 
 .message {
-  margin-top: 1rem;
   text-align: center;
-  font-weight: 600;
-  color: red;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: #f8d7da;
+  color: #721c24;
+  font-weight: 500;
 }
 
-.message.success {
-  color: green;
+.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Mobil uyumluluk */
+@media (max-width: 500px) {
+  .container {
+    margin: 2rem 1rem;
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+  }
 }

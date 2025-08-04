@@ -1,6 +1,6 @@
-// pages/products/[id].js
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import styles from '../styles/ProductDetail.module.css';
 
 export default function ProductDetail() {
   const router = useRouter();
@@ -30,15 +30,20 @@ export default function ProductDetail() {
     alert('Ürün sepete eklendi!');
   };
 
-  if (loading) return <div>Yükleniyor...</div>;
-  if (!product) return <div>Ürün bulunamadı</div>;
+  if (loading) return <div className={styles.loading}>Yükleniyor...</div>;
+  if (!product) return <div className={styles.notFound}>Ürün bulunamadı</div>;
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>{product.name}</h1>
-      <p>{product.description}</p>
-      <p><strong>{product.price} ₺</strong></p>
-      <img src={product.imageUrl} alt={product.name} width="300" />
+    <div className={styles.container}>
+      <div className={styles.imageWrapper}>
+        <img src={product.imageUrl} alt={product.name} className={styles.image} />
+      </div>
+      <div className={styles.details}>
+        <h1 className={styles.title}>{product.name}</h1>
+        <p className={styles.description}>{product.description}</p>
+        <p className={styles.price}>{product.price} ₺</p>
+        <button className={styles.addButton} onClick={sepeteEkle}>Sepete Ekle</button>
+      </div>
     </div>
   );
 }

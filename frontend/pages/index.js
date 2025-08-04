@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router'; // yönlendirme için
-
-import styles from './styles/Home.module.css';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -12,7 +10,6 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const router = useRouter();
 
-  // 🚨 Giriş yapılmamışsa login sayfasına yönlendir
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     if (!storedUserId) {
@@ -22,7 +19,6 @@ export default function Home() {
     }
   }, []);
 
-  // Kategorileri al
   useEffect(() => {
     fetch('http://localhost:5000/api/categories')
       .then((res) => res.json())
@@ -30,7 +26,6 @@ export default function Home() {
       .catch(() => console.error('Kategori alınamadı'));
   }, []);
 
-  // Ürünleri al
   useEffect(() => {
     let url = 'http://localhost:5000/api/products';
     if (selectedCategoryId) {
@@ -82,49 +77,72 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1>Ürünler</h1>
+    <div className="container my-4">
+      <h1 className="mb-4 text-center">Ürünler</h1>
 
-      {message && <div className={styles.message}>{message}</div>}
+      {message && (
+        <div className="alert alert-info text-center" role="alert">
+          {message}
+        </div>
+      )}
 
-        <div className={styles.linksContainer}>
-          <div className={styles.filter}>
-        <label htmlFor="category">Kategori Seç: </label>
-        <select
-          id="category"
-          value={selectedCategoryId}
-          onChange={(e) => setSelectedCategoryId(e.target.value)}
-          className={styles.select}
-        >
-          <option value="">Tüm Kategoriler</option>
-          {categories.map((cat) => (
-            <option key={cat._id} value={cat._id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-          <Link href="/cart" className={styles.linkBtn}>Sepetim</Link> 
-          <Link href="/OrderHistory" className={styles.linkBtn}>Sipariş Geçmişi</Link>
-          <button onClick={handleLogout} className={styles.logoutBtn}>Çıkış Yap</button>
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+        <div className="d-flex align-items-center gap-2">
+          <label htmlFor="category" className="form-label mb-0">
+            Kategori Seç:
+          </label>
+          <select
+            id="category"
+            value={selectedCategoryId}
+            onChange={(e) => setSelectedCategoryId(e.target.value)}
+            className="form-select"
+            style={{ minWidth: '200px' }}
+          >
+            <option value="">Tüm Kategoriler</option>
+            {categories.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="d-flex gap-2 flex-wrap justify-content-center">
+          <Link href="/cart" className="btn btn-primary">
+            Sepetim
+          </Link>
+          <Link href="/OrderHistory" className="btn btn-secondary">
+            Sipariş Geçmişi
+          </Link>
+          <button onClick={handleLogout} className="btn btn-danger">
+            Çıkış Yap
+          </button>
         </div>
       </div>
 
-      <ul className={styles.productList}>
+      <div className="row row-cols-1 row-cols-md-3 g-4">
         {products.map((product) => (
-          <li key={product._id} className={styles.productItem}>
-            <Link href={`/product/${product._id}`} className={styles.productLink}>
-              <strong>{product.name}</strong> - {product.price}₺
-            </Link>
-            <p>Kategori: {product.category?.name || 'Kategori yok'}</p>
-            <button
-              onClick={() => handleAddToCart(product)}
-              className={styles.addToCartBtn}
-            >
-              Sepete Ekle
-            </button>
-          </li>
+          <div key={product._id} className="col">
+            <div className="card h-100 shadow-sm">
+              <div className="card-body d-flex flex-column">
+                <Link href={`/product/${product._id}`} className="card-title h5 text-decoration-none">
+                  {product.name}
+                </Link>
+                <p className="card-text mb-1">{product.price}₺</p>
+                <p className="text-muted mb-3">
+                  Kategori: {product.category?.name || 'Kategori yok'}
+                </p>
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="btn btn-outline-primary mt-auto"
+                >
+                  Sepete Ekle
+                </button>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

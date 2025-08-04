@@ -97,7 +97,7 @@ export default function AdminPanel() {
                     Düzenle
                   </button>
                   <button
-                    className="delete"
+                    className={styles.delete}
                     onClick={() => handleDelete(product._id)}
                   >
                     Sil

@@ -116,8 +116,9 @@ export default function AddProduct() {
             <img src={imageUrl} alt="Önizleme" />
           </div>
         )}
-
-        <button type="submit">Ürün Ekle</button>
+        <div className={styles.submitWrapper}>
+        <button type="submit" className={styles.submitButton}>Ürün Ekle</button>
+        </div>
       </form>
 
       {message && (

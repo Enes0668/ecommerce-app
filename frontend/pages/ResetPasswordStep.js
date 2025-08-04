@@ -36,8 +36,9 @@ export default function ResetPasswordStep({ otp }) {
   };
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.heading}>Yeni Şifrenizi Girin</h2>
+  <div className={styles.container}>
+    <h2 className={styles.heading}>Yeni Şifrenizi Girin</h2>
+    <form onSubmit={(e) => { e.preventDefault(); handleReset(); }} className={styles.form}>
       <input
         type="password"
         placeholder="Yeni şifre"
@@ -46,10 +47,11 @@ export default function ResetPasswordStep({ otp }) {
         className={styles.input}
         required
       />
-      <button onClick={handleReset} className={styles.button}>
+      <button type="submit" className={styles.button}>
         Şifreyi Güncelle
       </button>
-      {message && <p className={styles.message}>{message}</p>}
-    </div>
-  );
+    </form>
+    {message && <p className={styles.message}>{message}</p>}
+  </div>
+);
 }
