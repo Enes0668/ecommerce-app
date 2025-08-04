@@ -1,6 +1,6 @@
-// pages/admin/products/edit/[id].js
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import styles from '../../../styles/EditProductPage.module.css';
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -31,9 +31,7 @@ export default function EditProductPage() {
 
     const res = await fetch(`http://localhost:5000/api/products/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(product),
     });
 
@@ -48,22 +46,48 @@ export default function EditProductPage() {
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Ürünü Güncelle</h1>
-      <form onSubmit={handleSubmit}>
+      <form className={styles.formWrapper} onSubmit={handleSubmit}>
         <div>
-          <label>İsim:</label>
-          <input name="name" value={product.name} onChange={handleChange} required />
+          <label className={styles.label}>İsim:</label>
+          <input
+            name="name"
+            value={product.name}
+            onChange={handleChange}
+            required
+            className={styles.input}
+            type="text"
+          />
         </div>
         <div>
-          <label>Fiyat:</label>
-          <input name="price" type="number" value={product.price} onChange={handleChange} required />
+          <label className={styles.label}>Fiyat:</label>
+          <input
+            name="price"
+            type="number"
+            value={product.price}
+            onChange={handleChange}
+            required
+            className={styles.input}
+          />
         </div>
         <div>
-          <label>Açıklama:</label>
-          <textarea name="description" value={product.description} onChange={handleChange} required />
+          <label className={styles.label}>Açıklama:</label>
+          <textarea
+            name="description"
+            value={product.description}
+            onChange={handleChange}
+            required
+            className={styles.textarea}
+          />
         </div>
         <div>
-          <label>Resim URL:</label>
-          <input name="imageUrl" value={product.imageUrl} onChange={handleChange} required />
+          <label className={styles.label}>Resim URL:</label>
+          <input
+            name="imageUrl"
+            value={product.imageUrl}
+            onChange={handleChange}
+            required
+            className={styles.input}
+          />
         </div>
         <button type="submit">Güncelle</button>
       </form>

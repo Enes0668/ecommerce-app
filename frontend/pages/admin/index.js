@@ -66,6 +66,12 @@ export default function AdminPanel() {
         >
           Kullanıcılar
         </button>
+        <button
+          className={styles.button}
+          onClick={() => router.push('/AddCategory')}
+        >
+          + Kategori ekle
+        </button>
       </div>
 
       <div className={styles.tableWrapper}>

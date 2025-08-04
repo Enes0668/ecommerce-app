@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styles from '../pages/styles/AddCategory.module.css';
 
 export default function AddCategory() {
   const [name, setName] = useState('');
@@ -22,21 +23,26 @@ export default function AddCategory() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Kategori Ekle</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Kategori Ekle</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Kategori Adı:</label>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Kategori Adı:</label>
           <input
             type="text"
+            className={styles.input}
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
-        <button type="submit">Ekle</button>
+        <button type="submit" className={styles.btn}>Ekle</button>
       </form>
-      {message && <p>{message}</p>}
+      {message && (
+        <p className={`${styles.message} ${message.includes('başarıyla') ? styles.success : ''}`}>
+          {message}
+        </p>
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import styles from '../styles/AdminUsers.module.css';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -11,9 +12,9 @@ export default function AdminUsers() {
   }, []);
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Kullanıcı Listesi</h1>
-      <table border="1" cellPadding="10" style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Kullanıcı Listesi</h1>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>Kullanıcı Adı</th>
@@ -24,15 +25,23 @@ export default function AdminUsers() {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
-            <tr key={user._id}>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
-              <td>{user.address || '-'}</td>
-              <td>{user.phone || '-'}</td>
-              <td>{new Date(user.createdAt).toLocaleString()}</td>
+          {users.length === 0 ? (
+            <tr>
+              <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>
+                Kullanıcı bulunamadı.
+              </td>
             </tr>
-          ))}
+          ) : (
+            users.map(user => (
+              <tr key={user._id}>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td className={user.address ? '' : styles.emptyCell}>{user.address || '-'}</td>
+                <td className={user.phone ? '' : styles.emptyCell}>{user.phone || '-'}</td>
+                <td>{new Date(user.createdAt).toLocaleString()}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
