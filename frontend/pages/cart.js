@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import styles from './styles/Cart.module.css';
+import { useRouter } from 'next/router';  // sayfanın üst kısmına ekle
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const router = useRouter();
   useEffect(() => {
     fetchCartItems();
   }, []);
@@ -78,35 +79,8 @@ export default function Cart() {
   };
 
   const handleCheckout = async () => {
-    const userId = localStorage.getItem('userId');
-
-    try {
-      const response = await fetch('http://localhost:5000/api/orders/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: userId,
-          items: cartItems.map(item => ({
-            productId: item.productId._id || item.productId,
-            quantity: item.quantity
-          }))
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Siparişiniz başarıyla oluşturuldu!');
-        fetchCartItems();
-      } else {
-        alert(data.message || 'Sipariş oluşturulamadı.');
-      }
-    } catch (error) {
-      console.error('Sipariş hatası:', error);
-      alert('Sunucu hatası oluştu.');
-    }
+    localStorage.setItem('totalPrice', totalPrice);
+    router.push('/payment');
   };
 
   return (

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Cart = require('../models/Cart');
+const stripe = require('../stripe');
 const mongoose = require('mongoose');
 
 // Kullanıcının sepetini getirme
@@ -83,7 +84,5 @@ router.delete('/clear/:userId', async (req, res) => {
     res.status(500).json({ message: 'Sunucu hatası, sepet temizlenemedi', error: error.message });
   }
 });
-
-
 
 module.exports = router;
