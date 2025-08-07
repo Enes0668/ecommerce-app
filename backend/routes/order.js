@@ -3,37 +3,46 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
-const mongoose = require('mongoose');
 
 // Sipariş oluşturma
 router.post('/create', async (req, res) => {
   try {
-    const { userId, items } = req.body;
+    const { userId } = req.body;
     let totalPrice = 0;
-    // Kullanıcının sepetinden ürünleri al
+
+    // Kullanıcının sepetini al
     const cartItems = await Cart.find({ userId });
 
     if (cartItems.length === 0) {
       return res.status(400).json({ message: "Sepet boş" });
     }
-    for (const item of items) {
+
+    const orderItems = [];
+
+    for (const item of cartItems) {
       const product = await Product.findById(item.productId);
       if (!product) {
-        return res.status(404).json({ message: 'Ürün bulunamadı' });
+        return res.status(404).json({ message: `Ürün bulunamadı: ${item.productId}` });
       }
-      totalPrice += product.price * item.quantity;
+
+      const itemTotal = product.price * item.quantity;
+      totalPrice += itemTotal;
+
+      orderItems.push({
+        productId: item.productId,
+        name: product.name,
+        price: product.price,
+        quantity: item.quantity
+      });
     }
+
     // Siparişi oluştur
     const order = new Order({
-    userId,
-    items: cartItems.map(item => ({
-    productId: item.productId,
-    name: item.name,
-    price: item.price,
-    quantity: item.quantity
-    })),
-   totalPrice // 👈 bunu ekliyoruz!
+      userId,
+      items: orderItems,
+      totalPrice
     });
+
     await order.save();
 
     // Sepeti temizle
@@ -46,11 +55,11 @@ router.post('/create', async (req, res) => {
   }
 });
 
-// Belirli bir kullanıcının sipariş geçmişi
+// Kullanıcının sipariş geçmişi (en yeni önce)
 router.get('/history/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const orders = await Order.find({ userId }).sort({ createdAt: -1 }); // En yeni siparişler önce
+    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
     console.error("Sipariş geçmişi hatası:", error);
@@ -58,32 +67,30 @@ router.get('/history/:userId', async (req, res) => {
   }
 });
 
-
+// Belirli kullanıcıya ait siparişleri ürünlerle birlikte getir
 router.get('/user/:userId', async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.params.userId })
-      .populate('items.productId'); // 👈 Burada populate yaptık
+      .populate('items.productId');
     res.json(orders);
   } catch (err) {
-    console.error(err);
+    console.error("Kullanıcı siparişleri alınamadı:", err);
     res.status(500).json({ message: 'Siparişler alınamadı.' });
   }
 });
 
+// Tüm siparişleri getir (admin için)
 router.get('/all', async (req, res) => {
   try {
     const orders = await Order.find()
       .sort({ createdAt: -1 })
-      .populate('items.productId') // ✔ Ürün bilgilerini getir
+      .populate('items.productId')
       .populate('userId', 'username email');
-      console.log(orders);
     res.json(orders);
   } catch (err) {
     console.error('Sipariş alma hatası:', err);
     res.status(500).json({ message: 'Siparişler alınamadı' });
   }
 });
-// GET /api/orders/:userId - Belirli kullanıcının tüm siparişlerini getirir
-
 
 module.exports = router;

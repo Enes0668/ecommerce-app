@@ -1,26 +1,27 @@
+// routes/payment.js
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-const stripe = require('../stripe'); // dikkat: ../stripe
+const Stripe = require('stripe').default;  // BURAYI DÜZELT
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // Stripe secret key .env dosyasında olmalı
 
 router.post('/create-payment-intent', async (req, res) => {
-  const { items } = req.body;
-
-  const amount = items.reduce((total, item) => {
-    return total + (item.price * item.quantity);
-  }, 0);
-
   try {
+    const { items, amount } = req.body;
+
+    // Eğer fiyatı frontend’den aldıysan bu örnek şu şekilde olacak:
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // kuruş
-      currency: 'try'
+      amount: amount || 50, // Kuruş cinsinden. Örnek: 1000 kuruş = 10 TL
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
     });
 
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-      amount: amount * 100
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json({ clientSecret: paymentIntent.client_secret, amount: paymentIntent.amount });
+  } catch (error) {
+    console.error('Payment Intent oluşturulamadı:', error);
+    res.status(500).json({ error: 'Ödeme isteği oluşturulamadı' });
   }
 });
 

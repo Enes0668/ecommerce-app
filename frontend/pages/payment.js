@@ -29,10 +29,14 @@ function CheckoutForm() {
     setCartItems(items);
 
     const fetchPaymentIntent = async () => {
-      const res = await fetch('http://localhost:5000/api/create-payment-intent', {
+      const res = await fetch('http://localhost:5000/api/payment/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items })
+        body: JSON.stringify({
+        amount: 1000,
+        currency:'usd',  // kuruş cinsinden: 1000 = 10 TL
+        items: []      // backend items bekliyorsa boş dizi bile olsa gönderilmeli
+        })
       });
 
       const data = await res.json();

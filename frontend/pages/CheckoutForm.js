@@ -11,28 +11,29 @@ export default function CheckoutForm() {
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    const res = await fetch('http://localhost:5000/api/payment/create-payment-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: 1000 }) // 10₺
-    });
+  const res = await fetch('http://localhost:5000/api/payment/create-payment-intent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: 1000 }) // Ödeme tutarı (kuruş)
+  });
 
-    const { clientSecret } = await res.json();
+  const { clientSecret } = await res.json();
 
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-      }
-    });
-
-    if (result.error) {
-      setMessage(`Hata: ${result.error.message}`);
-    } else if (result.paymentIntent.status === 'succeeded') {
-      setMessage('Ödeme başarılı!');
+  const result = await stripe.confirmCardPayment(clientSecret, {
+    payment_method: {
+      card: elements.getElement(CardElement),
     }
-  };
+  });
+
+  if (result.error) {
+    setMessage(`Hata: ${result.error.message}`);
+  } else if (result.paymentIntent.status === 'succeeded') {
+    setMessage('Ödeme başarılı!');
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit}>
