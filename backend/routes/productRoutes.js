@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {
-      return res.status(404).json({ message: 'Ürün bulunamadı' });
+      return res.status(400).json({ message: 'Ürün bulunamadı' });
     }
     res.json(product);
   } catch (err) {
@@ -65,7 +65,7 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: 'Ürün bulunamadı' });
+    if (!product) return res.status(400).json({ message: 'Ürün bulunamadı' });
     res.json(product);
   } catch (err) {
     console.error(err);
@@ -85,7 +85,7 @@ router.put('/:id', async (req, res) => {
     );
 
     if (!updatedProduct) {
-      return res.status(404).json({ message: 'Ürün bulunamadı' });
+      return res.status(400).json({ message: 'Ürün bulunamadı' });
     }
 
     res.json(updatedProduct);
@@ -102,7 +102,7 @@ router.delete('/:id', async (req, res) => {
     const deleted = await Product.findByIdAndDelete(productId);
 
     if (!deleted) {
-      return res.status(404).json({ message: 'Ürün bulunamadı' });
+      return res.status(400).json({ message: 'Ürün bulunamadı' });
     }
 
     res.json({ message: 'Ürün başarıyla silindi' });

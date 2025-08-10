@@ -115,7 +115,7 @@ app.post('/api/cart/add', async (req, res) => {
         quantity,
       });
       await newCartItem.save();
-      return res.status(200).json({ message: 'Ürün sepete eklendi' });
+      return res.status(201).json({ message: 'Ürün sepete eklendi.' });
     }
   } catch (error) {
     console.error(error);
@@ -244,7 +244,7 @@ app.post('/api/auth/reset-password', async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+      return res.status(400).json({ message: 'Kullanıcı bulunamadı' });
     }
 
     // Burada user.otp kontrolü yapmak için öncelikle User modelinde otp alanı olması gerekiyor.
@@ -279,8 +279,12 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Sayfa bulunamadı' });
 });
 
+if (require.main === module){
 // Server başlatma
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server ${port} portunda çalışıyor...`);
-});
+})
+}
+
+module.exports = app;

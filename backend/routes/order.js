@@ -22,7 +22,7 @@ router.post('/create', async (req, res) => {
     for (const item of cartItems) {
       const product = await Product.findById(item.productId);
       if (!product) {
-        return res.status(404).json({ message: `Ürün bulunamadı: ${item.productId}` });
+        return res.status(400).json({ message: `Ürün bulunamadı: ${item.productId}` });
       }
 
       const itemTotal = product.price * item.quantity;

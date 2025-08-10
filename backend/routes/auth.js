@@ -182,7 +182,7 @@ router.post(
         return res.status(400).json({ message: "Email veya şifre yanlış." });
       }
 
-      const isMatch = await bcrypt.compare(password, user.passwordHash);
+      const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(400).json({ message: "Email veya şifre yanlış." });
       }

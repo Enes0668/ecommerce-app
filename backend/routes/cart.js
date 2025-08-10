@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Cart = require('../models/Cart');
-const stripe = require('../stripe');
 const mongoose = require('mongoose');
 
 // Kullanıcının sepetini getirme
@@ -24,10 +23,10 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
-// Sepete ürün ekleme
-router.post('/cart', async (req, res) => {
+// Sepete ürün ekleme (POST '/api/cart')
+router.post('/', async (req, res) => {
   try {
-    const { userId, productId, name, price } = req.body;
+    const { userId, productId, name, price, categoryName } = req.body;
 
     let existingItem = await Cart.findOne({ userId, productId });
 
@@ -42,7 +41,7 @@ router.post('/cart', async (req, res) => {
         name,
         price,
         quantity: 1,
-        categoryName: product.categoryName
+        categoryName
       });
       await newCartItem.save();
       return res.status(201).json(newCartItem);
@@ -59,12 +58,12 @@ router.put('/:id', async (req, res) => {
     const { quantity } = req.body;
     const cartItem = await Cart.findById(req.params.id);
 
-    if (!cartItem) return res.status(404).json({ message: 'Ürün bulunamadı' });
+    if (!cartItem) return res.status(400).json({ message: 'Ürün bulunamadı' });
 
     cartItem.quantity = quantity;
     await cartItem.save();
 
-    res.status(200).json({ message: 'Adet güncellendi' });
+    res.status(200).json({ message: 'Ürün miktarı güncellendi' });
   } catch (error) {
     console.error('Adet güncelleme hatası:', error);
     res.status(500).json({ message: 'Sunucu hatası' });
@@ -75,9 +74,10 @@ router.put('/:id', async (req, res) => {
 router.delete('/clear/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
-    const userObjectId = new mongoose.Types.ObjectId(userId);
 
-    const result = await Cart.deleteMany({ userId: userObjectId });
+    // Eğer userId string ise direkt kullan
+    const result = await Cart.deleteMany({ userId });
+
     res.status(200).json({ message: 'Sepet başarıyla temizlendi', deletedCount: result.deletedCount });
   } catch (error) {
     console.error('Sepet temizleme hatası:', error);
