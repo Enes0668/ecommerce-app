@@ -9,7 +9,6 @@ const jwt = require('jsonwebtoken');
 const setupSwagger = require("./swagger.js");
 const app = express();
 app.use(express.json());
-setupSwagger(app);
 const Product = require('./models/Product');
 const Cart = require('./models/Cart');
 const User = require('./models/User');
@@ -51,6 +50,8 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
+setupSwagger(app);
+
 async function saveOtpToDB(email, otp) {
   // Aynı email için eski OTP'leri sil (opsiyonel)
   await OtpModel.deleteMany({ email });
