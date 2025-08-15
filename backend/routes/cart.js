@@ -1,3 +1,112 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Cart
+ *   description: Kullanıcı sepeti işlemleri
+ */
+
+/**
+ * @swagger
+ * /api/cart/user/{userId}:
+ *   get:
+ *     summary: Kullanıcının sepetini getir
+ *     tags: [Cart]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Kullanıcının ID'si
+ *     responses:
+ *       200:
+ *         description: Sepet başarıyla getirildi
+ *       500:
+ *         description: Sepet getirilemedi
+ */
+
+/**
+ * @swagger
+ * /api/cart:
+ *   post:
+ *     summary: Sepete ürün ekle
+ *     tags: [Cart]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               productId:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               categoryName:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Ürün sepete eklendi
+ *       200:
+ *         description: Ürün zaten varsa miktar arttırıldı
+ *       500:
+ *         description: Sepete ekleme başarısız
+ */
+
+/**
+ * @swagger
+ * /api/cart/{id}:
+ *   put:
+ *     summary: Sepetteki ürünün miktarını güncelle
+ *     tags: [Cart]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               quantity:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Ürün miktarı güncellendi
+ *       400:
+ *         description: Ürün bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
+
+/**
+ * @swagger
+ * /api/cart/clear/{userId}:
+ *   delete:
+ *     summary: Kullanıcının sepetini temizle
+ *     tags: [Cart]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Sepet başarıyla temizlendi
+ *       500:
+ *         description: Sepet temizlenemedi
+ */
+
+
 const express = require('express');
 const router = express.Router();
 const Cart = require('../models/Cart');

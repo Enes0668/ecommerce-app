@@ -1,3 +1,89 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Order
+ *   description: Sipariş işlemleri
+ */
+
+/**
+ * @swagger
+ * /api/order/create:
+ *   post:
+ *     summary: Kullanıcının sepetinden sipariş oluştur
+ *     tags: [Order]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 example: 64e5f2a123456789abcdef01
+ *     responses:
+ *       201:
+ *         description: Sipariş başarıyla oluşturuldu
+ *       400:
+ *         description: Sepet boş veya ürün bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
+
+/**
+ * @swagger
+ * /api/order/history/{userId}:
+ *   get:
+ *     summary: Kullanıcının sipariş geçmişini getir (en yeni önce)
+ *     tags: [Order]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Kullanıcı ID
+ *     responses:
+ *       200:
+ *         description: Başarıyla sipariş geçmişi getirildi
+ *       500:
+ *         description: Sunucu hatası
+ */
+
+/**
+ * @swagger
+ * /api/order/user/{userId}:
+ *   get:
+ *     summary: Kullanıcının siparişlerini ürün detaylarıyla getir
+ *     tags: [Order]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Kullanıcı ID
+ *     responses:
+ *       200:
+ *         description: Siparişler başarıyla getirildi
+ *       500:
+ *         description: Sunucu hatası
+ */
+
+/**
+ * @swagger
+ * /api/order/all:
+ *   get:
+ *     summary: Tüm siparişleri getir (admin)
+ *     tags: [Order]
+ *     responses:
+ *       200:
+ *         description: Başarıyla tüm siparişler getirildi
+ *       500:
+ *         description: Sunucu hatası
+ */
+
+
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');

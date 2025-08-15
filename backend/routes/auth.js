@@ -1,3 +1,165 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RegisterUser:
+ *       type: object
+ *       required:
+ *         - username
+ *         - email
+ *         - password
+ *         - confirmPassword
+ *       properties:
+ *         username:
+ *           type: string
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *         confirmPassword:
+ *           type: string
+ *         phone:
+ *           type: string
+ *         address:
+ *           type: string
+ *     LoginUser:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *     OTPRequest:
+ *       type: object
+ *       required:
+ *         - email
+ *       properties:
+ *         email:
+ *           type: string
+ *     OTPVerify:
+ *       type: object
+ *       required:
+ *         - email
+ *         - otp
+ *       properties:
+ *         email:
+ *           type: string
+ *         otp:
+ *           type: string
+ *     ResetPassword:
+ *       type: object
+ *       required:
+ *         - email
+ *         - otp
+ *         - newPassword
+ *       properties:
+ *         email:
+ *           type: string
+ *         otp:
+ *           type: string
+ *         newPassword:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Yeni kullanıcı kaydı
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterUser'
+ *     responses:
+ *       201:
+ *         description: Kullanıcı başarıyla oluşturuldu.
+ *       400:
+ *         description: Hatalı istek veya email zaten kayıtlı.
+ */
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Kullanıcı girişi
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginUser'
+ *     responses:
+ *       200:
+ *         description: Giriş başarılı, token döner.
+ *       400:
+ *         description: Email veya şifre hatalı.
+ */
+
+/**
+ * @swagger
+ * /send-otp:
+ *   post:
+ *     summary: OTP gönder
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/OTPRequest'
+ *     responses:
+ *       200:
+ *         description: OTP gönderildi.
+ *       400:
+ *         description: Email girilmedi.
+ */
+
+/**
+ * @swagger
+ * /verify-otp:
+ *   post:
+ *     summary: OTP doğrula
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/OTPVerify'
+ *     responses:
+ *       200:
+ *         description: OTP doğru.
+ *       400:
+ *         description: Kod hatalı veya süresi dolmuş.
+ */
+
+/**
+ * @swagger
+ * /reset-password:
+ *   post:
+ *     summary: Şifre sıfırlama
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ResetPassword'
+ *     responses:
+ *       200:
+ *         description: Şifre başarıyla güncellendi.
+ *       400:
+ *         description: Kod geçersiz veya kullanıcı bulunamadı.
+ */
+
+
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');

@@ -1,3 +1,14 @@
+/**
+ * @swagger
+ * /api/payment/create-payment-intent:
+ *   post:
+ *     summary: Stripe ödeme isteği oluşturur
+ *     description: Stripe üzerinden ödeme intenti başlatır.
+ *     responses:
+ *       200:
+ *         description: Ödeme intenti başarıyla oluşturuldu.
+ */
+
 // routes/payment.js
 require('dotenv').config();
 const express = require('express');

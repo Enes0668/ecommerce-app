@@ -1,3 +1,176 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Products
+ *   description: Ürün yönetimi
+ */
+
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Tüm ürünleri veya kategoriye göre filtrelenmiş ürünleri getir
+ *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Filtrelemek için kategori ID
+ *     responses:
+ *       200:
+ *         description: Ürün listesi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       500:
+ *         description: Sunucu hatası
+ *   post:
+ *     summary: Yeni ürün oluştur
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductInput'
+ *     responses:
+ *       201:
+ *         description: Ürün başarıyla oluşturuldu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Hatalı istek / Kategori bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
+
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   get:
+ *     summary: ID'ye göre ürün getir
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Ürün ID
+ *     responses:
+ *       200:
+ *         description: Ürün bilgisi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Ürün bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ *   put:
+ *     summary: Ürünü güncelle
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Güncellenecek ürün ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductInput'
+ *     responses:
+ *       200:
+ *         description: Ürün başarıyla güncellendi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Ürün bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ *   delete:
+ *     summary: Ürünü sil
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Silinecek ürün ID
+ *     responses:
+ *       200:
+ *         description: Ürün başarıyla silindi
+ *       400:
+ *         description: Ürün bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         price:
+ *           type: number
+ *         description:
+ *           type: string
+ *         category:
+ *           $ref: '#/components/schemas/Category'
+ *         imageUrl:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *     ProductInput:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *         - category
+ *       properties:
+ *         name:
+ *           type: string
+ *         price:
+ *           type: number
+ *         description:
+ *           type: string
+ *         category:
+ *           type: string
+ *         imageUrl:
+ *           type: string
+ *     Category:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ */
+
 const express = require('express');
 const mongoose = require('mongoose'); // mongoose'yi import et
 const router = express.Router();
@@ -59,17 +232,6 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Ürün oluşturulurken hata oluştu' });
-  }
-});
-
-router.get('/:id', async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(400).json({ message: 'Ürün bulunamadı' });
-    res.json(product);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Sunucu hatası' });
   }
 });
 

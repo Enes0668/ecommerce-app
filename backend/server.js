@@ -1,4 +1,5 @@
 require('dotenv').config();
+import { swaggerUi, swaggerSpec } from './swagger.js';
 
 const express = require('express');
 const cors = require('cors');
@@ -52,7 +53,7 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // OTP kaydetme fonksiyonu
 async function saveOtpToDB(email, otp) {
   // Aynı email için eski OTP'leri sil (opsiyonel)
