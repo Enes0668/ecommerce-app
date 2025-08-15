@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { swaggerUi, swaggerSpec } from './swagger.js';
+import { swaggerUi, swaggerSpec } from './swagger';
 
 const express = require('express');
 const cors = require('cors');
