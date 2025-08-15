@@ -1,5 +1,4 @@
 require('dotenv').config();
-import { swaggerUi, swaggerSpec } from './swagger.js';
 
 const express = require('express');
 const cors = require('cors');
@@ -7,11 +6,10 @@ const mongoose = require('mongoose');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const setupSwagger = require("./swagger.js");
 const app = express();
 app.use(express.json());
-
-
+setupSwagger(app);
 const Product = require('./models/Product');
 const Cart = require('./models/Cart');
 const User = require('./models/User');
@@ -53,8 +51,6 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-// OTP kaydetme fonksiyonu
 async function saveOtpToDB(email, otp) {
   // Aynı email için eski OTP'leri sil (opsiyonel)
   await OtpModel.deleteMany({ email });
