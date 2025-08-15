@@ -76,7 +76,7 @@ function CheckoutForm() {
     if (paymentResult.paymentIntent.status === 'succeeded') {
       const userId = localStorage.getItem('userId');
 
-      const orderRes = await fetch(`${API_URL}/api/orders/create'`, {
+      const orderRes = await fetch(`${API_URL}/api/orders/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, items: cartItems })
