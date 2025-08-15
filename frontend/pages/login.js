@@ -67,6 +67,13 @@ export default function Login() {
         <button onClick={() => router.push('/forgot-password')} className={styles.linkButton}>
           Şifremi unuttum
         </button>
+        <br>
+        </br>
+        <br>
+        </br>
+        <button onClick={() => router.push('/register')} className={styles.linkButton}>
+          Kayıt Ol
+        </button>
       </p>
 
       {errorMessage && <p className={styles.error}>{errorMessage}</p>}
