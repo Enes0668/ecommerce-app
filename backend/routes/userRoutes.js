@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
+const User = require('../models/User');
 
 // Tüm kullanıcıları getir (Admin için)
 router.get('/', async (req, res) => {
