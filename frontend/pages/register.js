@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./styles/Register.module.css"; // CSS modülünü import et
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 function calculatePasswordStrength(password) {
   let score = 0;
   if (!password) return score;
@@ -76,7 +76,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

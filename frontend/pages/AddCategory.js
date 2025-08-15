@@ -4,11 +4,12 @@ import styles from '../pages/styles/AddCategory.module.css';
 export default function AddCategory() {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('http://localhost:5000/api/categories', {
+    const res = await fetch(`${API_URL}/api/categories`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name }),

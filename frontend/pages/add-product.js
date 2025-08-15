@@ -10,9 +10,10 @@ export default function AddProduct() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/categories')
+    axios.get(`${API_URL}/api/categories`)
       .then(res => setCategories(res.data))
       .catch(err => {
         console.error('Kategori yüklenirken hata:', err);
@@ -24,7 +25,7 @@ export default function AddProduct() {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:5000/api/products', {
+      const res = await fetch(`${API_URL}/api/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

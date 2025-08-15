@@ -9,11 +9,11 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState('');
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const handleSubmit = async (event) => {
   event.preventDefault();
 
-  const res = await fetch('http://localhost:5000/api/payment/create-payment-intent', {
+  const res = await fetch(`${API_URL}/api/payment/create-payment-intent`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ amount: 1000 }) // Ödeme tutarı (kuruş)

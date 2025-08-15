@@ -3,11 +3,11 @@ import axios from 'axios';
 
 const CategoryFilter = ({ onSelectCategory }) => {
   const [categories, setCategories] = useState([]);
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/categories');
+        const res = await axios.get(`${API_URL}/api/categories`);
         setCategories(res.data);
       } catch (error) {
         console.error('Kategori alınamadı:', error);

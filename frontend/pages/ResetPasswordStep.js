@@ -8,7 +8,7 @@ export default function ResetPasswordStep({ otp }) {
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState(null);
   const router = useRouter();
-
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
     setEmail(storedEmail);
@@ -21,7 +21,7 @@ export default function ResetPasswordStep({ otp }) {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/reset-password', {
+      const response = await axios.post(`${API_KEY}/api/auth/reset-password`, {
         email,
         otp,
         newPassword,

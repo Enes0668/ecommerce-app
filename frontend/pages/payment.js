@@ -22,6 +22,7 @@ function CheckoutForm() {
   const [amount, setAmount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const price = localStorage.getItem('totalPrice');
     if (price) setTotalPrice(Number(price));
@@ -29,7 +30,7 @@ function CheckoutForm() {
     setCartItems(items);
 
     const fetchPaymentIntent = async () => {
-      const res = await fetch('http://localhost:5000/api/payment/create-payment-intent', {
+      const res = await fetch(`${API_URL}/api/payment/create-payment-intent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -75,7 +76,7 @@ function CheckoutForm() {
     if (paymentResult.paymentIntent.status === 'succeeded') {
       const userId = localStorage.getItem('userId');
 
-      const orderRes = await fetch('http://localhost:5000/api/orders/create', {
+      const orderRes = await fetch(`${API_URL}/api/orders/create'`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, items: cartItems })

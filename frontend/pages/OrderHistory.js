@@ -4,10 +4,11 @@ import styles from './styles/OrderHistory.module.css';
 export default function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:5000/api/orders/user/${userId}`)
+    fetch(`${API_URL}/api/orders/user/${userId}`)
       .then(res => res.json())
       .then(data => {
         setOrders(data);

@@ -6,6 +6,7 @@ export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const router = useRouter();
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     fetchCartItems();
   }, []);
@@ -13,7 +14,7 @@ export default function Cart() {
   const fetchCartItems = async () => {
     const userId = localStorage.getItem('userId');
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/user/${userId}`);
+      const response = await fetch(`${API_URL}/api/cart/user/${userId}`);
       const data = await response.json();
 
       if (Array.isArray(data)) {
@@ -37,7 +38,7 @@ export default function Cart() {
 
   const handleDelete = async (itemId) => {
     try {
-      await fetch(`http://localhost:5000/api/cart/${itemId}`, {
+      await fetch(`${API_URL}/api/cart/${itemId}`, {
         method: 'DELETE',
       });
       fetchCartItems();
@@ -50,7 +51,7 @@ export default function Cart() {
     if (newQuantity < 1) return;
 
     try {
-      await fetch(`http://localhost:5000/api/cart/${itemId}`, {
+      await fetch(`${API_URL}/api/cart/${itemId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ export default function Cart() {
   const clearCart = async () => {
     const userId = localStorage.getItem('userId');
     try {
-      const response = await fetch(`http://localhost:5000/api/cart/clear/${userId}`, {
+      const response = await fetch(`${API_URL}/api/cart/clear/${userId}`, {
         method: 'DELETE',
       });
       const data = await response.json();

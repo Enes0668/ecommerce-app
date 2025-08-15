@@ -9,6 +9,7 @@ export default function Home() {
   const [userId, setUserId] = useState(null);
   const [message, setMessage] = useState('');
   const router = useRouter();
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
@@ -20,14 +21,14 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/categories')
+    fetch(`${API_URL}/api/categories`)
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch(() => console.error('Kategori alınamadı'));
   }, []);
 
   useEffect(() => {
-    let url = 'http://localhost:5000/api/products';
+    let url = `${API_URL}/api/products`;
     if (selectedCategoryId) {
       url += `?category=${selectedCategoryId}`;
     }
@@ -45,7 +46,7 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/cart/add', {
+      const response = await fetch(`${API_URL}/api/cart/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
