@@ -30,7 +30,9 @@ const sendEmail = require('./utils/email');
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: 'https://ecommerce-app-rho-plum.vercel.app/'
+}));
 
 // MongoDB bağlantısı
 mongoose.connect(process.env.MONGO_URI, {
