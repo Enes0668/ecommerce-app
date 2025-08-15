@@ -31,7 +31,7 @@ const sendEmail = require('./utils/email');
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: 'https://ecommerce-app-rho-plum.vercel.app/',
+  origin: 'https://ecommerce-app-rho-plum.vercel.app',
   credentials: true
 }));
 
