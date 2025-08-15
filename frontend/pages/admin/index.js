@@ -6,6 +6,7 @@ export default function AdminPanel() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
@@ -15,7 +16,7 @@ export default function AdminPanel() {
       return;
     }
 
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_URL}/api/products`)
       .then(res => res.json())
       .then(data => {
         setProducts(data);
@@ -31,7 +32,7 @@ export default function AdminPanel() {
     if (!confirm('Silmek istediğinize emin misiniz?')) return;
 
     try {
-      await fetch(`http://localhost:5000/api/products/${id}`, {
+      await fetch(`${API_URL}/api/products/${id}`, {
         method: 'DELETE',
       });
 

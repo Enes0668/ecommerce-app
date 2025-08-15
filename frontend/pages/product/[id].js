@@ -7,11 +7,12 @@ export default function ProductDetail() {
   const { id } = router.query;
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     if (!id) return;
 
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${API_URL}/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);

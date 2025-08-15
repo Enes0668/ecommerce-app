@@ -5,6 +5,7 @@ import styles from '../../../styles/EditProductPage.module.css';
 export default function EditProductPage() {
   const router = useRouter();
   const { id } = router.query;
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const [product, setProduct] = useState({
     name: '',
@@ -16,7 +17,7 @@ export default function EditProductPage() {
   useEffect(() => {
     if (!id) return;
 
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${API_URL}/api/products/${id}`)
       .then(res => res.json())
       .then(data => setProduct(data))
       .catch(err => console.error('Ürün yüklenemedi:', err));
@@ -29,7 +30,7 @@ export default function EditProductPage() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+    const res = await fetch(`${API_URL}/api/products/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(product),

@@ -3,9 +3,10 @@ import styles from '../styles/AdminUsers.module.css';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/users')
+    fetch(`${API_URL}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error('Kullanıcılar alınamadı:', err));

@@ -5,9 +5,10 @@ export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);      // Yükleniyor durumu eklendi
   const [error, setError] = useState(null);          // Hata durumu eklendi
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/orders/all')
+    fetch(`${API_URL}/api/orders/all`)
       .then(res => {
         if (!res.ok) throw new Error('Sunucu hatası');
         return res.json();

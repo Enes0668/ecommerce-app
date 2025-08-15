@@ -4,9 +4,10 @@ export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchProducts = () => {
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_URL}/api/products`)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(() => console.error('Ürünler alınamadı'));

@@ -5,10 +5,11 @@ function ProductList() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   // Kategorileri çek
   useEffect(() => {
-    axios.get('http://localhost:5000/api/categories')
+    axios.get(`${API_URL}/api/categories`)
       .then(res => setCategories(res.data))
       .catch(err => console.error('Kategori alınamadı:', err));
   }, []);
@@ -18,8 +19,8 @@ function ProductList() {
     const fetchProducts = async () => {
       try {
         const url = selectedCategoryId
-          ? `http://localhost:5000/api/products?category=${selectedCategoryId}`
-          : `http://localhost:5000/api/products`;
+          ? `${API_URL}/api/products?category=${selectedCategoryId}`
+          : `${API_URL}/api/products`;
 
         const res = await axios.get(url);
         setProducts(res.data);
