@@ -66,7 +66,7 @@
 
 /**
  * @swagger
- * /register:
+ * /api/register:
  *   post:
  *     summary: Yeni kullanıcı kaydı
  *     tags: [Auth]
@@ -85,7 +85,7 @@
 
 /**
  * @swagger
- * /login:
+ * /api/login:
  *   post:
  *     summary: Kullanıcı girişi
  *     tags: [Auth]
@@ -104,7 +104,7 @@
 
 /**
  * @swagger
- * /send-otp:
+ * /api/send-otp:
  *   post:
  *     summary: OTP gönder
  *     tags: [Auth]
@@ -123,7 +123,7 @@
 
 /**
  * @swagger
- * /verify-otp:
+ * /api/verify-otp:
  *   post:
  *     summary: OTP doğrula
  *     tags: [Auth]
@@ -142,7 +142,7 @@
 
 /**
  * @swagger
- * /reset-password:
+ * /api/reset-password:
  *   post:
  *     summary: Şifre sıfırlama
  *     tags: [Auth]

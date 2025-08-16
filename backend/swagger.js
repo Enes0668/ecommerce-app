@@ -15,7 +15,7 @@ const setupSwagger = (app) => {
         { url: "https://ecommerce-app-1-bpok.onrender.com" } // render URL’in
       ]
     },
-    apis: ["./routes/*.js"], // swagger açıklamalarını auth.js içinde de kullanabiliriz // Swagger yorumlarının olduğu route dosyaları
+    apis: [path.join(__dirname, "routes/*.js")] // swagger açıklamalarını auth.js içinde de kullanabiliriz // Swagger yorumlarının olduğu route dosyaları
   };
 
   const swaggerSpec = swaggerJsDoc(options);
