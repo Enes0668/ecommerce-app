@@ -168,6 +168,10 @@ const sendEmail = require('../utils/email');
 const OtpModel = require('../models/Otp'); // OTP için model, eğer varsa
 const { body, validationResult } = require('express-validator');
 
+const { validate } = require('../middleware/validate');
+const { loginSchema, registerSchema } = require('../validators/auth.schema');
+const { loginIpLimiter, loginAccountLimiter } = require('../middleware/rateLimiters');
+
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
@@ -241,7 +245,7 @@ router.post("/reset-password", async (req, res) => {
 
 // Kayıt olma
 router.post(
-  "/register",
+  "/register", validate(registerSchema),
   [
     // 🔐 VALIDATION KURALLARI
     body("username")
@@ -319,7 +323,9 @@ module.exports = router;
 
 // Giriş yapma
 router.post(
-  "/login",
+  "/login",loginIpLimiter,
+  validate(require('../validators/auth.schema').loginSchema),
+  loginAccountLimiter,
   [
     // Validasyon kuralları
     body("email")

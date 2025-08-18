@@ -7,7 +7,13 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const setupSwagger = require("./swagger.js");
+
+const { securityMiddlewares } = require('./middleware/security');
+const { apiLimiter } = require('./middleware/rateLimiters');
+
+
 const app = express();
+securityMiddlewares(app);
 app.use(express.json());
 const Product = require('./models/Product');
 const Cart = require('./models/Cart');
@@ -32,7 +38,7 @@ app.use(cors({
   origin: 'https://ecommerce-app-rho-plum.vercel.app',
   credentials: true
 }));
-
+app.use('/api', apiLimiter);
 // MongoDB bağlantısı
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
