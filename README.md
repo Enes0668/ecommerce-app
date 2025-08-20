@@ -3,7 +3,7 @@
 Modern e-ticaret uygulaması. Kullanıcılar ürünleri görüntüleyebilir, sepete ekleyebilir ve sipariş verebilir. Admin paneli üzerinden ürün, kategori ve kullanıcı yönetimi yapılabilir.  
 
 ## 🚀 Projenin Amacı
-Bu proje, **Node.js + Express**, **MongoDB** ve **React** kullanılarak tam fonksiyonel bir e-ticaret platformunun nasıl geliştirileceğini göstermek amacıyla yapılmıştır.  
+Bu proje, **Node.js + Express**, **MongoDB** ve **React** kullanılarak fonksiyonel bir e-ticaret platformunun nasıl geliştirileceğini göstermek amacıyla yapılmıştır.  
 
 ## 🛠 Kullanılan Teknolojiler
 - **Frontend:** React, React Router, Axios, CSS (TailwindCSS / Vanilla CSS)  
@@ -11,7 +11,7 @@ Bu proje, **Node.js + Express**, **MongoDB** ve **React** kullanılarak tam fonk
 - **Database:** MongoDB, Mongoose  
 - **Authentication:** JWT, bcrypt  
 - **Ortam Değişkenleri:** dotenv  
-- **API Testi:** Postman  
+- **API Testi:** Swagger  
 
 ## 🔑 Test Kullanıcı Bilgileri
 ### Admin Hesabı
@@ -21,14 +21,14 @@ Bu proje, **Node.js + Express**, **MongoDB** ve **React** kullanılarak tam fonk
 - **Email:** admin@gmail.com 
 - **Şifre:** Admin123@  
 
-## 📬 Postman Koleksiyonu
-👉 [Postman API Collection Linki](🟢https://ecommerce-app-1-bpok.onrender.com/api-docs)  
+## 📬 Swagger Koleksiyonu
+👉 [API Dokümantasyonu (Swagger)](🟢https://ecommerce-app-1-bpok.onrender.com/api-docs)
 
 ## 🌍 Canlı Demo
 - **Frontend:** (🟢https://ecommerce-app-rho-plum.vercel.app/)
 - **Backend API:** (🟢https://ecommerce-app-1-bpok.onrender.com/)  
 
-## 📸 Ekran Görüntüleri
+## 📸 Örnek Ekran Görüntüleri
 ### Anasayfa
 ![Home Screenshot](./screenshots/home.png)
 
