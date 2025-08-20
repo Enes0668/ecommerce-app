@@ -38,6 +38,3 @@ Bu proje, **Node.js + Express**, **MongoDB** ve **React** kullanılarak tam fonk
 ### Admin Panel
 ![Admin Screenshot](./screenshots/admin.png)
 
-
-### Admin Panel
-![Admin Screenshot](./screenshots/admin.png)
