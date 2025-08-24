@@ -22,7 +22,7 @@ Bu proje, **Node.js + Express**, **MongoDB** ve **React** kullanılarak fonksiyo
 - **Şifre:** Admin123@  
 
 ## 📬 Swagger Koleksiyonu
-👉 [API Dokümantasyonu (Swagger)](🟢https://ecommerce-app-1-bpok.onrender.com/api-docs)
+👉 (🟢https://ecommerce-app-1-bpok.onrender.com/api-docs)
 
 ## 🌍 Canlı Demo
 - **Frontend:** (🟢https://ecommerce-app-rho-plum.vercel.app/)
