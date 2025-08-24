@@ -1,6 +1,8 @@
 import { useState } from "react";
-import styles from "./styles/Register.module.css"; // CSS modülünü import et
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { useRouter } from "next/router"; // <-- useRouter import ettik
+import styles from "./styles/Register.module.css";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 function calculatePasswordStrength(password) {
   let score = 0;
   if (!password) return score;
@@ -11,10 +13,12 @@ function calculatePasswordStrength(password) {
   if (/\d/.test(password)) score += 1;
   if (/[\W_]/.test(password)) score += 1;
 
-  return score; // 0 - 5 arası puan
+  return score;
 }
 
 export default function Register() {
+  const router = useRouter(); // <-- router hook
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -103,6 +107,9 @@ export default function Register() {
           address: "",
           phone: "",
         });
+
+        // Kayıt başarılıysa index sayfasına yönlendir
+        router.push("/"); // <-- yönlendirme burada
       } else {
         setMessage(data.message || "Kayıt olurken hata oluştu.");
         setMessageColor("red");
@@ -136,6 +143,12 @@ export default function Register() {
           required
           className={styles.input}
         />
+
+        <p className={styles.passwordHint}>
+          Şifre en az 8 karakter olmalı, büyük harf, küçük harf, rakam ve özel
+          karakter içermelidir.
+        </p>
+
         <input
           type="password"
           name="password"
@@ -145,6 +158,7 @@ export default function Register() {
           required
           className={styles.input}
         />
+
         <input
           type="password"
           name="confirmPassword"
@@ -155,7 +169,6 @@ export default function Register() {
           className={styles.input}
         />
 
-        {/* Şifre güç göstergesi */}
         <div className={styles.strengthBar}>
           <div
             className={styles.strengthBarFill}
