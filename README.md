@@ -13,9 +13,6 @@ Bu proje, **Node.js + Express**, **MongoDB** ve **React** kullanılarak fonksiyo
 - **Ortam Değişkenleri:** dotenv  
 - **API Testi:** Swagger  
 
-## 🔑 Test Kullanıcı Bilgileri
-### Admin Hesabı
-- **Şifre:** admin123  
 
 ### Kullanıcı Hesabı
 - **Email:** admin@gmail.com 
