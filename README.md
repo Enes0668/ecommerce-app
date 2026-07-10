@@ -13,11 +13,6 @@ Bu proje, **Node.js + Express**, **MongoDB** ve **React** kullanılarak fonksiyo
 - **Ortam Değişkenleri:** dotenv  
 - **API Testi:** Swagger  
 
-
-### Kullanıcı Hesabı
-- **Email:** admin@gmail.com 
-- **Şifre:** Admin123@  
-
 ## 📬 Swagger Koleksiyonu
 👉 (🟢https://ecommerce-app-1-bpok.onrender.com/api-docs)
 
